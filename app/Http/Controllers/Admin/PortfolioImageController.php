@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PortfolioImageRequest;
 use App\Models\Portfolio;
 use App\Models\PortfolioImage;
+use App\Support\SvgSanitizer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,6 +15,10 @@ class PortfolioImageController extends Controller
     public function store(PortfolioImageRequest $request, Portfolio $portfolio): RedirectResponse
     {
         $path = $request->file('image_file')->store('portfolios/gallery', 'public');
+
+        if (is_string($path)) {
+            SvgSanitizer::sanitizeFile(Storage::disk('public')->path($path));
+        }
 
         $portfolio->images()->create([
             'image_path' => $path,

@@ -4,6 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class SeoRequest extends FormRequest
 {
@@ -22,8 +23,10 @@ class SeoRequest extends FormRequest
      */
     public function rules(): array
     {
+        $seo = $this->route('seo');
+
         return [
-            'path' => ['required', 'string', 'max:200'],
+            'path' => ['required', 'string', 'max:200', Rule::unique('seo_meta', 'path')->ignore($seo?->id)],
             'label' => ['required', 'string', 'max:100'],
             'title' => ['nullable', 'string', 'max:200'],
             'description' => ['nullable', 'string', 'max:300'],

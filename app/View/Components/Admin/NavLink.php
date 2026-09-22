@@ -12,6 +12,7 @@ class NavLink extends Component
         public string $icon,
         public bool $active = false,
         public int|string|null $badge = null,
+        public ?string $badgeTarget = null,
     ) {}
 
     public function render(): View

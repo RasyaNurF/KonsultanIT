@@ -34,6 +34,11 @@ class ServiceController extends Controller
     {
         abort_unless($service->status === PublishStatus::Published, 404);
 
+        $service->load(['industries' => fn ($query) => $query
+            ->where('status', PublishStatus::Published->value)
+            ->orderBy('sort_order')
+            ->orderBy('name')]);
+
         $related = Service::query()
             ->where('status', PublishStatus::Published->value)
             ->whereKeyNot($service->id)

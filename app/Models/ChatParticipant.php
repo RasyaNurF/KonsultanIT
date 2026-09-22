@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ChatParticipant extends Model
 {
     protected $fillable = [
+        'user_id',
         'guest_token',
         'name',
         'email',
@@ -18,18 +20,47 @@ class ChatParticipant extends Model
         'subject',
         'status',
         'last_message_at',
+        'user_last_read_message_id',
     ];
 
     protected function casts(): array
     {
         return [
             'last_message_at' => 'datetime',
+            'user_last_read_message_id' => 'integer',
         ];
     }
 
     public function messages(): HasMany
     {
         return $this->hasMany(ChatMessage::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function isFromRegisteredUser(): bool
+    {
+        return $this->user_id !== null;
+    }
+
+    public function unreadForUser(): int
+    {
+        return $this->messages()
+            ->where('sender', 'admin')
+            ->where('id', '>', (int) ($this->user_last_read_message_id ?? 0))
+            ->count();
+    }
+
+    public function markReadByUser(): void
+    {
+        $latestId = $this->messages()->max('id');
+
+        if ($latestId !== null && (int) $latestId > (int) ($this->user_last_read_message_id ?? 0)) {
+            $this->update(['user_last_read_message_id' => $latestId]);
+        }
     }
 
     #[Scope]

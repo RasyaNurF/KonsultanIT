@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SettingRequest;
 use App\Models\SiteSetting;
+use App\Support\SvgSanitizer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
@@ -49,6 +50,8 @@ class SettingController extends Controller
 
                 continue;
             }
+
+            SvgSanitizer::sanitizeFile(Storage::disk('public')->path($path));
 
             $this->deleteStoredFile(SiteSetting::value($field));
             $data[$field] = $path;

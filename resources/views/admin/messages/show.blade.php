@@ -14,18 +14,19 @@
     </x-slot:actions>
 </x-admin.page-header>
 
-<div class="mt-8 grid gap-8 lg:grid-cols-[1.6fr_1fr]">
+<div class="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
     {{-- Kiri: thread + form balasan --}}
     <x-admin.card class="overflow-hidden">
-        <div class="flex max-h-[560px] flex-col gap-3 overflow-y-auto p-5">
+        <div data-admin-thread data-poll-url="{{ route('admin.messages.poll', $participant) }}" data-last-id="{{ $messages->last()?->id ?? 0 }}"
+            class="flex max-h-[560px] flex-col gap-3 overflow-y-auto p-5">
             @forelse ($messages as $message)
-                @php($isGuest = $message->sender === 'guest')
-                <div class="flex flex-col {{ $isGuest ? 'items-start' : 'items-end' }}">
-                    <div class="max-w-[85%] rounded-lg px-4 py-2.5 text-sm leading-relaxed {{ $isGuest ? 'bg-neutral-100 text-neutral-800' : 'bg-navy-800 text-white' }}">
+                @php($isInbound = $message->sender !== 'admin')
+                <div data-message-id="{{ $message->id }}" class="flex flex-col {{ $isInbound ? 'items-start' : 'items-end' }}">
+                    <div class="max-w-[85%] rounded-lg px-4 py-2.5 text-sm leading-relaxed {{ $isInbound ? 'bg-neutral-100 text-neutral-800' : 'bg-navy-800 text-white' }}">
                         {{ $message->body }}
                     </div>
                     <span class="mt-1 text-[11px] text-neutral-400">
-                        {{ $message->name ?: ($isGuest ? 'Pengunjung' : 'Admin') }} · {{ $message->created_at->format('H:i d M') }}
+                        {{ $message->name ?: ($isInbound ? 'Pengunjung' : 'Admin') }} · {{ $message->created_at->format('H:i d M') }}
                     </span>
                 </div>
             @empty
@@ -53,7 +54,7 @@
                 @method('put')
 
                 <x-admin.field label="Status" name="status" :required="true">
-                    <select name="status" class="h-10 w-full rounded-md border border-neutral-200 bg-white pl-3 pr-8 text-sm text-neutral-900 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+                    <select name="status" data-admin-status class="h-10 w-full rounded-md border border-neutral-200 bg-white pl-3 pr-8 text-sm text-neutral-900 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
                         @foreach ($statuses as $status)
                             <option value="{{ $status->value }}" @selected(old('status', $participant->status) === $status->value)>{{ $status->label() }}</option>
                         @endforeach
@@ -74,6 +75,16 @@
                         <dd class="text-[13px] text-neutral-900">{{ $value ?: '—' }}</dd>
                     </div>
                 @endforeach
+                <div class="grid grid-cols-[100px_1fr] gap-4 py-3">
+                    <dt class="text-[13px] font-medium text-neutral-500">Tipe</dt>
+                    <dd class="text-[13px] text-neutral-900">
+                        @if ($participant->isFromRegisteredUser())
+                            <x-admin.badge tone="brand">Pengguna terdaftar</x-admin.badge>
+                        @else
+                            <x-admin.badge tone="neutral">Pengunjung</x-admin.badge>
+                        @endif
+                    </dd>
+                </div>
                 <div class="grid grid-cols-[100px_1fr] gap-4 py-3">
                     <dt class="text-[13px] font-medium text-neutral-500">Dibuat</dt>
                     <dd class="text-[13px] text-neutral-900">{{ $participant->created_at->translatedFormat('d F Y H:i') }}</dd>

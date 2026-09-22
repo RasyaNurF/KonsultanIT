@@ -24,8 +24,11 @@ class ServiceRequest extends FormRequest
      */
     public function rules(): array
     {
+        $service = $this->route('service');
+
         return [
             'title' => ['required', 'string', 'max:150'],
+            'slug' => ['nullable', 'string', 'max:180', Rule::unique('services', 'slug')->ignore($service?->id)],
             'description' => ['nullable', 'string', 'max:5000'],
             'icon' => ['nullable', 'string', 'max:100'],
             'image_path' => ['nullable', 'string', 'max:255'],

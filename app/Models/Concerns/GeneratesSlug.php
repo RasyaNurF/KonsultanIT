@@ -15,8 +15,12 @@ trait GeneratesSlug
         });
 
         static::updating(function ($model) {
-            if ($model->isDirty($model->slugSource()) && ! $model->isDirty('slug')) {
-                $model->slug = static::uniqueSlug($model->{$model->slugSource()}, $model->getKey());
+            $source = $model->slugSource();
+
+            // Regenerasi bila slug dikosongkan, atau bila sumber berubah dan slug
+            // tidak diisi manual (biar tidak ada slug NULL → error kolom NOT NULL).
+            if (blank($model->slug) || ($model->isDirty($source) && ! $model->isDirty('slug'))) {
+                $model->slug = static::uniqueSlug($model->{$source}, $model->getKey());
             }
         });
     }

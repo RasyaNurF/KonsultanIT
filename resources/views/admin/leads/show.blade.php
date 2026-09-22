@@ -18,9 +18,9 @@
     </x-slot:actions>
 </x-admin.page-header>
 
-<div class="mt-8 grid gap-8 lg:grid-cols-[1.5fr_1fr]">
+<div class="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
     {{-- Kiri: detail permintaan --}}
-    <div class="space-y-6">
+    <div class="min-w-0 space-y-6">
         <x-admin.card title="Detail Permintaan">
             @php
                 $rows = [

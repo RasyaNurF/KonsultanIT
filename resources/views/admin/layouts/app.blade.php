@@ -32,14 +32,28 @@
         <nav class="flex-1 overflow-y-auto px-3 pb-6 text-[13px]" aria-label="Menu utama">
             <x-admin.nav-link :href="route('admin.dashboard')" icon="dashboard" :active="request()->routeIs('admin.dashboard')">Dashboard</x-admin.nav-link>
 
-            <x-admin.nav-section label="CRM" :routes="['admin.leads.*', 'admin.messages.*', 'admin.clients.*']" />
-            <x-admin.nav-link :href="route('admin.leads.index')" icon="inbox" :active="request()->routeIs('admin.leads.*')" badge="{{ $pendingLeads ?? 0 }}">Leads</x-admin.nav-link>
-            <x-admin.nav-link :href="route('admin.messages.index')" icon="message" :active="request()->routeIs('admin.messages.*')" badge="{{ $unreadMessages ?? 0 }}">Pesan</x-admin.nav-link>
-            <x-admin.nav-link :href="route('admin.clients.index')" icon="building" :active="request()->routeIs('admin.clients.*')">Klien</x-admin.nav-link>
+            @if (auth()->user()->hasAbility('lead.view') || auth()->user()->hasAbility('message.view') || auth()->user()->hasAbility('client.view'))
+                <x-admin.nav-section label="CRM" :routes="['admin.leads.*', 'admin.messages.*', 'admin.clients.*']" />
+                @if (auth()->user()->hasAbility('lead.view'))
+                    <x-admin.nav-link :href="route('admin.leads.index')" icon="inbox" :active="request()->routeIs('admin.leads.*')" badge="{{ $pendingLeads ?? 0 }}">Leads</x-admin.nav-link>
+                @endif
+                @if (auth()->user()->hasAbility('message.view'))
+                    <x-admin.nav-link :href="route('admin.messages.index')" icon="message" :active="request()->routeIs('admin.messages.*')" badge="{{ $unreadMessages ?? 0 }}" badge-target="messages">Pesan</x-admin.nav-link>
+                @endif
+                @if (auth()->user()->hasAbility('client.view'))
+                    <x-admin.nav-link :href="route('admin.clients.index')" icon="building" :active="request()->routeIs('admin.clients.*')">Klien</x-admin.nav-link>
+                @endif
+            @endif
 
-            <x-admin.nav-section label="Proyek" :routes="['admin.projects.*', 'admin.portfolios.*']" />
-            <x-admin.nav-link :href="route('admin.projects.index')" icon="kanban" :active="request()->routeIs('admin.projects.*')">Proyek</x-admin.nav-link>
-            <x-admin.nav-link :href="route('admin.portfolios.index')" icon="briefcase" :active="request()->routeIs('admin.portfolios.*')">Portfolio</x-admin.nav-link>
+            @if (auth()->user()->hasAbility('project.view') || auth()->user()->hasAbility('portfolio.view'))
+                <x-admin.nav-section label="Proyek" :routes="['admin.projects.*', 'admin.portfolios.*']" />
+                @if (auth()->user()->hasAbility('project.view'))
+                    <x-admin.nav-link :href="route('admin.projects.index')" icon="kanban" :active="request()->routeIs('admin.projects.*')">Proyek</x-admin.nav-link>
+                @endif
+                @if (auth()->user()->hasAbility('portfolio.view'))
+                    <x-admin.nav-link :href="route('admin.portfolios.index')" icon="briefcase" :active="request()->routeIs('admin.portfolios.*')">Portfolio</x-admin.nav-link>
+                @endif
+            @endif
 
             <x-admin.nav-section label="Konten" :routes="['admin.services.*', 'admin.solution-categories.*', 'admin.solutions.*', 'admin.resources.*', 'admin.industries.*',
  'admin.articles.*', 'admin.blog-categories.*', 'admin.testimonials.*', 'admin.teams.*', 'admin.heroes.*', 'admin.media.*']" />
@@ -61,13 +75,22 @@
             <x-admin.nav-link :href="route('admin.careers.index')" icon="briefcase" :active="request()->routeIs('admin.careers.*')">Karier</x-admin.nav-link>
             <x-admin.nav-link :href="route('admin.career-applications.index')" icon="inbox" :active="request()->routeIs('admin.career-applications.*')">Lamaran</x-admin.nav-link>
 
-            <x-admin.nav-section label="Website" :routes="['admin.seo.*', 'admin.settings.*']" />
+            <x-admin.nav-section label="Website" :routes="['admin.seo.*', 'admin.settings.*', 'admin.announcements.*']" />
             <x-admin.nav-link :href="route('admin.seo.index')" icon="search" :active="request()->routeIs('admin.seo.*')">SEO</x-admin.nav-link>
-            <x-admin.nav-link :href="route('admin.settings.edit')" icon="settings" :active="request()->routeIs('admin.settings.*')">Pengaturan</x-admin.nav-link>
+            <x-admin.nav-link :href="route('admin.announcements.index')" icon="megaphone" :active="request()->routeIs('admin.announcements.*')">Pengumuman</x-admin.nav-link>
+            @if (auth()->user()->hasAbility('settings.view'))
+                <x-admin.nav-link :href="route('admin.settings.edit')" icon="settings" :active="request()->routeIs('admin.settings.*')">Pengaturan</x-admin.nav-link>
+            @endif
 
-            <x-admin.nav-section label="Admin" :routes="['admin.users.*', 'admin.profile.*']" />
-            <x-admin.nav-link :href="route('admin.users.index')" icon="users" :active="request()->routeIs('admin.users.*')">Pengguna</x-admin.nav-link>
-            <x-admin.nav-link :href="route('admin.profile.edit')" icon="user" :active="request()->routeIs('admin.profile.*')">Profil</x-admin.nav-link>
+            @if (auth()->user()->hasAbility('user.view') || auth()->user()->hasAbility('profile.manage'))
+                <x-admin.nav-section label="Admin" :routes="['admin.users.*', 'admin.profile.*']" />
+                @if (auth()->user()->hasAbility('user.view'))
+                    <x-admin.nav-link :href="route('admin.users.index')" icon="users" :active="request()->routeIs('admin.users.*')">Pengguna</x-admin.nav-link>
+                @endif
+                @if (auth()->user()->hasAbility('profile.manage'))
+                    <x-admin.nav-link :href="route('admin.profile.edit')" icon="user" :active="request()->routeIs('admin.profile.*')">Profil</x-admin.nav-link>
+                @endif
+            @endif
         </nav>
 
         <div class="shrink-0 border-t border-white/10 p-3">
@@ -118,9 +141,7 @@
 
                 <a href="{{ route('admin.messages.index', ['status' => 'unread']) }}" class="relative flex h-9 w-9 items-center justify-center rounded-md text-neutral-600 transition hover:bg-neutral-100" aria-label="Pesan belum dibaca">
                     <x-admin.icon name="bell" class="h-5 w-5" />
-                    @if (($unreadMessages ?? 0) > 0)
-                        <span class="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-600 px-1 text-[10px] font-bold text-white">{{ $unreadMessages > 9 ? '9+' : $unreadMessages }}</span>
-                    @endif
+                    <span data-admin-badge="messages" class="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-600 px-1 text-[10px] font-bold text-white {{ ($unreadMessages ?? 0) > 0 ? '' : 'hidden' }}">{{ ($unreadMessages ?? 0) > 9 ? '9+' : ($unreadMessages ?? 0) }}</span>
                 </a>
 
                 <div class="relative" data-dropdown>
@@ -172,6 +193,8 @@
 
 {{-- Toast --}}
 <div data-toast-container class="pointer-events-none fixed bottom-5 right-5 z-[60] flex w-[min(360px,calc(100vw-2.5rem))] flex-col gap-2"></div>
+
+<span data-admin-unread-url="{{ route('admin.messages.unread') }}" hidden></span>
 
 <div class="hidden" aria-hidden="true">
     @if (session('success'))<span data-flash="success" data-message="{{ session('success') }}"></span>@endif

@@ -36,7 +36,7 @@ class SolutionRequest extends FormRequest
             'cover_image_path_remove' => ['sometimes', 'boolean'],
             'partner_name' => ['nullable', 'string', 'max:150'],
             'cta_label' => ['nullable', 'string', 'max:100'],
-            'cta_url' => ['nullable', 'string', 'max:255'],
+            'cta_url' => ['nullable', 'string', 'max:255', 'regex:/^(https?:\/\/|\/)[^\s]*$/i'],
             'features_text' => ['nullable', 'string', 'max:5000'],
             'benefits_text' => ['nullable', 'string', 'max:5000'],
             'is_featured' => ['sometimes', 'boolean'],

@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\CareerRequest;
 use App\Models\Career;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class CareerController extends Controller
@@ -83,6 +84,12 @@ class CareerController extends Controller
 
     public function destroy(Career $career): RedirectResponse
     {
+        foreach ($career->applications as $application) {
+            if (filled($application->cv_path) && Storage::disk('public')->exists($application->cv_path)) {
+                Storage::disk('public')->delete($application->cv_path);
+            }
+        }
+
         $career->delete();
 
         return redirect()->route('admin.careers.index')->with('success', 'Lowongan berhasil dihapus.');

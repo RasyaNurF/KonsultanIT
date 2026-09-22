@@ -6,16 +6,16 @@
 @section('content')
     <section class="bg-white">
         <div class="mx-auto max-w-7xl px-4 sm:px-6">
-            <div class="grid gap-12 py-20 sm:py-28 lg:grid-cols-[1.6fr_1fr]">
-                <div class="max-w-3xl">
+            <div class="grid gap-12 py-20 sm:py-28 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+                <div class="min-w-0 max-w-3xl">
                     <p class="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.24em] text-navy-950">
                         <a href="{{route('solusi.index')}}" class="transition hover:text-brand-700">Solusi</a>
                         <span class="text-neutral-300" aria-hidden="true">/</span>
                         <a href="{{route('solusi.category',$category->slug)}}" class="transition hover:text-brand-700">{{$category->name}}</a>
                     </p>
-                    @if($solution->partner_name)
-                        <p class="mt-6 text-[11px] font-bold uppercase tracking-[0.2em] text-brand-700">{{$solution->partner_name}}</p>
-                    @endif
+                    <p class="mt-6 inline-flex w-fit items-center rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] {{ $solution->partner_name ? 'bg-neutral-100 text-neutral-500' : 'bg-brand-50 text-brand-700' }}">
+                        {{ $solution->partner_name ? 'Mitra: '.$solution->partner_name : 'Layanan terkelola' }}
+                    </p>
                     <h1 class="mt-3 text-4xl font-extrabold leading-[1.05] tracking-tight text-balance text-navy-950 sm:text-5xl">{{$solution->title}}</h1>
                     @if($solution->subtitle)
                         <p class="mt-4 text-lg font-semibold text-neutral-500">{{$solution->subtitle}}</p>
@@ -32,20 +32,18 @@
                     </div>
                 </div>
 
-                @if($solution->logo_path||$solution->partner_name)
-                    <div class="flex items-center lg:justify-end">
-                        <div class="w-full max-w-sm rounded-2xl border border-neutral-200 bg-neutral-50 p-10 text-center">
-                            @if($solution->logo_path)
-                                <img src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($solution->logo_path)}}" alt="Logo {{$solution->title}}" class="mx-auto h-16 max-w-[70%] object-contain">
-                            @else
-                                <span class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-navy-950 text-lg font-extrabold text-white">{{mb_strtoupper(mb_substr($solution->partner_name,0,2))}}</span>
-                            @endif
-                            @if($solution->partner_name)
-                                <p class="mt-5 text-[13px] font-bold uppercase tracking-[0.18em] text-neutral-400">Produk mitra {{$solution->partner_name}}</p>
-                            @endif
-                        </div>
+                <div class="flex items-center lg:justify-end">
+                    <div class="w-full max-w-sm rounded-2xl border border-neutral-200 bg-neutral-50 p-10 text-center">
+                        @if($solution->logo_path)
+                            <img src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($solution->logo_path)}}" alt="Logo {{$solution->title}}" class="mx-auto h-16 max-w-[70%] object-contain">
+                        @elseif($solution->partner_name)
+                            <span class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-navy-950 text-lg font-extrabold text-white">{{mb_strtoupper(mb_substr($solution->partner_name,0,2))}}</span>
+                        @else
+                            <span class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-navy-950 text-white"><svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 13 4 4L19 7"/></svg></span>
+                        @endif
+                        <p class="mt-5 text-[13px] font-bold uppercase tracking-[0.18em] text-neutral-400">{{$solution->partner_name?'Produk mitra '.$solution->partner_name:'Layanan terkelola Nusakode'}}</p>
                     </div>
-                @endif
+                </div>
             </div>
         </div>
     </section>
@@ -62,7 +60,7 @@
                 <div class="grid gap-12 lg:grid-cols-[1.6fr_1fr]">
                     <div>
                         @if($solution->body)
-                            <div class="prose max-w-none text-[15px] leading-relaxed text-neutral-600">{!!nl2br(e($solution->body))!!}</div>
+                            <div class="text-[15px] leading-relaxed text-neutral-600">{!!nl2br(e($solution->body))!!}</div>
                         @endif
 
                         @if(!empty($solution->features))

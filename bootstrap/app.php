@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\EnsureAdminHasAbility;
 use App\Http\Middleware\RedirectIfMaintenance;
+use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -18,6 +19,14 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin.ability' => EnsureAdminHasAbility::class,
             'maintenance' => RedirectIfMaintenance::class,
         ]);
+
+        $middleware->encryptCookies(except: [
+            'nusakode_cookie_consent',
+            'nusakode_bar_dismissed',
+            'nusakode_popup_seen',
+        ]);
+
+        $middleware->append(SecurityHeaders::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

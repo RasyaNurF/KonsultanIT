@@ -24,8 +24,10 @@ class ClientRequest extends FormRequest
      */
     public function rules(): array
     {
+        $client = $this->route('client');
+
         return [
-            'name' => ['required', 'string', 'max:150'],
+            'name' => ['required', 'string', 'max:150', Rule::unique('clients', 'name')->ignore($client?->id)],
             'industry' => ['nullable', 'string', 'max:100'],
             'website' => ['nullable', 'url', 'max:255'],
             'logo_path' => ['nullable', 'string', 'max:255'],

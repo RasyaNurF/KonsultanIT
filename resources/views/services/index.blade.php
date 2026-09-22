@@ -8,8 +8,9 @@
         <div class="mx-auto max-w-7xl px-4 sm:px-6">
             <div class="max-w-3xl py-20 sm:py-28">
                 <p class="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.24em] text-navy-950"><span class="h-px w-10 bg-brand-600" aria-hidden="true"></span>Layanan</p>
-                <h1 class="mt-6 text-4xl font-extrabold leading-[1.05] tracking-tight text-balance text-navy-950 sm:text-6xl">Solusi digital yang dibangun untuk bisnis.</h1>
-                <p class="mt-6 max-w-xl text-base leading-relaxed text-neutral-500">Dari pengembangan aplikasi hingga integrasi sistem, setiap solusi kami fokus pada kualitas, performa, dan pengalaman pengguna yang optimal.</p>
+                <h1 class="mt-6 text-4xl font-extrabold leading-[1.05] tracking-tight text-balance text-navy-950 sm:text-6xl">Dibangun dan dirawat langsung oleh tim kami.</h1>
+                <p class="mt-6 max-w-xl text-base leading-relaxed text-neutral-500">Layanan adalah jasa yang dikerjakan engineer Nusakode — dari pengembangan aplikasi hingga pemeliharaan sistem. Butuh produk mitra seperti HRIS, CRM, cloud, atau ERP? Lihat katalog <a href="{{ route('solusi.index') }}" class="font-semibold text-brand-700 underline underline-offset-2 transition hover:text-brand-600">Solusi</a>.</p>
+                <a href="{{ route('solusi.index') }}" class="group mt-8 inline-flex items-center gap-2 text-sm font-bold text-navy-950 transition hover:text-brand-700">Lihat produk mitra kami<svg class="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
             </div>
         </div>
     </section>

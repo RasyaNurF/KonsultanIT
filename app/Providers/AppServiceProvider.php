@@ -2,9 +2,13 @@
 
 namespace App\Providers;
 
+use App\Enums\AnnouncementPlacement;
 use App\Enums\ClientStatus;
+use App\Enums\MessageStatus;
 use App\Enums\PublishStatus;
+use App\Models\Announcement;
 use App\Models\Article;
+use App\Models\ChatParticipant;
 use App\Models\Client;
 use App\Models\Hero;
 use App\Models\Industry;
@@ -29,6 +33,10 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        if ($this->app->isProduction() && config('app.debug')) {
+            throw new \RuntimeException('Konfigurasi tidak aman: APP_DEBUG harus false saat APP_ENV=production.');
+        }
+
         Gate::before(function (?User $user, string $ability) {
             if ($user === null) {
                 return null;
@@ -62,6 +70,45 @@ class AppServiceProvider extends ServiceProvider
             }
 
             $view->with('navSolutionCategories', $navSolutionCategories);
+
+            $chatUnread = 0;
+            $user = auth()->user();
+
+            if ($user !== null) {
+                try {
+                    $chatUnread = ChatParticipant::query()
+                        ->where('user_id', $user->id)
+                        ->first()
+                        ?->unreadForUser() ?? 0;
+                } catch (Throwable) {
+                    $chatUnread = 0;
+                }
+            }
+
+            $view->with('chatUnread', $chatUnread);
+
+            try {
+                $announcements = Announcement::query()
+                    ->active()
+                    ->orderBy('sort_order')
+                    ->get();
+            } catch (Throwable) {
+                $announcements = collect();
+            }
+
+            $view->with('announcementBar', $announcements->first(fn (Announcement $item) => $item->placement === AnnouncementPlacement::Bar));
+            $view->with('announcementPopup', $announcements->first(fn (Announcement $item) => $item->placement === AnnouncementPlacement::Popup));
+            $view->with('cookieNotice', $announcements->first(fn (Announcement $item) => $item->placement === AnnouncementPlacement::Cookie));
+        });
+
+        View::composer('admin.layouts.app', function ($view) {
+            try {
+                $view->with('unreadMessages', ChatParticipant::query()
+                    ->where('status', MessageStatus::Unread->value)
+                    ->count());
+            } catch (Throwable) {
+                $view->with('unreadMessages', 0);
+            }
         });
 
         View::composer('welcome', function ($view) {

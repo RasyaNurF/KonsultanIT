@@ -90,10 +90,10 @@ $quotes = $dbQuotes ?: $quotes;
                         <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                     </a>
                 </div>
-                <dl class="mt-12 flex divide-x divide-white/15 pt-8">
-                    <div class="pr-8 sm:pr-12"><dt class="sr-only">Pengalaman</dt><dd class="text-2xl font-extrabold">{{ $heroStats['experience'] }}</dd><dd class="mt-1 text-xs font-medium text-neutral-300">Tahun pengalaman</dd></div>
-                    <div class="px-8 sm:px-12"><dt class="sr-only">Proyek</dt><dd class="text-2xl font-extrabold">{{ $heroStats['projects'] }}</dd><dd class="mt-1 text-xs font-medium text-neutral-300">Proyek selesai</dd></div>
-                    <div class="pl-8 sm:pl-12"><dt class="sr-only">Retensi</dt><dd class="text-2xl font-extrabold">{{ $heroStats['retention'] }}</dd><dd class="mt-1 text-xs font-medium text-neutral-300">Klien melanjutkan</dd></div>
+                <dl class="mt-12 flex flex-col gap-6 pt-8 sm:flex-row sm:gap-0 sm:divide-x sm:divide-white/15">
+                    <div class="sm:pr-12"><dt class="sr-only">Pengalaman</dt><dd class="text-2xl font-extrabold">{{ $heroStats['experience'] }}</dd><dd class="mt-1 text-xs font-medium text-neutral-300">Tahun pengalaman</dd></div>
+                    <div class="sm:px-12"><dt class="sr-only">Proyek</dt><dd class="text-2xl font-extrabold">{{ $heroStats['projects'] }}</dd><dd class="mt-1 text-xs font-medium text-neutral-300">Proyek selesai</dd></div>
+                    <div class="sm:pl-12"><dt class="sr-only">Retensi</dt><dd class="text-2xl font-extrabold">{{ $heroStats['retention'] }}</dd><dd class="mt-1 text-xs font-medium text-neutral-300">Klien melanjutkan</dd></div>
                 </dl>
             </div>
         </div>
@@ -196,19 +196,25 @@ $quotes = $dbQuotes ?: $quotes;
                     <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                 </a>
             </div>
+        </div>
 
-            <div class="mt-12 grid gap-6 md:grid-cols-3">
-                @foreach (array_slice($works, 0, 3) as $w)
-                    <article>
-                        <a href="{{ $w['url'] ?? route('portfolio.index') }}" class="group relative block overflow-hidden rounded-2xl">
-                            <img src="{{ asset($w['img']) }}" alt="{{ $w['title'] }}" class="h-64 w-full object-cover transition duration-700 group-hover:scale-[1.06]" loading="lazy">
-                            <span class="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/25 to-transparent" aria-hidden="true"></span>
-                            <span class="absolute inset-x-0 bottom-0 p-5 sm:p-6">
-                                <span class="block text-[11px] font-bold uppercase tracking-[0.2em] text-brand-400">{{ $w['tag'] }}</span>
-                                <span class="mt-1.5 block text-lg font-bold leading-snug text-white">{{ $w['title'] }}</span>
-                            </span>
-                        </a>
-                    </article>
+        <div class="marquee-fade mt-12 overflow-hidden">
+            <div class="flex w-max animate-marquee-left">
+                @foreach ([0, 1] as $copy)
+                    <div class="flex shrink-0 gap-6 pr-6"@if ($copy > 0) aria-hidden="true"@endif>
+                        @foreach ($works as $w)
+                            <article class="w-[280px] shrink-0 sm:w-[360px]">
+                                <a href="{{ $w['url'] ?? route('portfolio.index') }}" class="group relative block overflow-hidden rounded-2xl">
+                                    <img src="{{ asset($w['img']) }}" alt="{{ $w['title'] }}" class="h-64 w-full object-cover transition duration-700 group-hover:scale-[1.06] sm:h-72" loading="lazy">
+                                    <span class="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/25 to-transparent" aria-hidden="true"></span>
+                                    <span class="absolute inset-x-0 bottom-0 p-5 sm:p-6">
+                                        <span class="block text-[11px] font-bold uppercase tracking-[0.2em] text-brand-400">{{ $w['tag'] }}</span>
+                                        <span class="mt-1.5 block text-lg font-bold leading-snug text-white">{{ $w['title'] }}</span>
+                                    </span>
+                                </a>
+                            </article>
+                        @endforeach
+                    </div>
                 @endforeach
             </div>
         </div>

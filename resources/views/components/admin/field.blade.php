@@ -1,6 +1,6 @@
 @php($fieldId = $for ?? $name)
 
-<div>
+<div {{ $attributes }}>
     <label for="{{ $fieldId }}" class="block text-[13px] font-semibold text-neutral-800">
         {{ $label }}
         @if ($required)<span class="text-red-500" aria-hidden="true">*</span>@endif

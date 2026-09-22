@@ -272,3 +272,140 @@ document.querySelectorAll('[data-image-input]').forEach((input) => {
         }
     });
 });
+
+// --- Pesan live di panel admin (tanpa perlu refresh) ---
+const unreadBadges = document.querySelectorAll('[data-admin-badge="messages"]');
+
+const setUnreadBadges = (count) => {
+    unreadBadges.forEach((badge) => {
+        badge.textContent = count > 9 ? '9+' : String(count);
+        badge.classList.toggle('hidden', count <= 0);
+    });
+};
+
+const messageLiveList = document.querySelector('[data-messages-live]');
+
+if (messageLiveList) {
+    const liveUrl = messageLiveList.getAttribute('data-live-url');
+
+    setInterval(async () => {
+        try {
+            const url = new URL(liveUrl, window.location.origin);
+            url.search = window.location.search;
+
+            const response = await fetch(url, { headers: { Accept: 'application/json' } });
+
+            if (!response.ok) {
+                return;
+            }
+
+            const data = await response.json();
+
+            if (typeof data.html === 'string') {
+                messageLiveList.innerHTML = data.html;
+            }
+
+            if (typeof data.unread === 'number') {
+                setUnreadBadges(data.unread);
+            }
+        } catch (error) {
+            // Diamkan; percobaan berikutnya akan mencoba lagi.
+        }
+    }, 8000);
+}
+
+const adminThread = document.querySelector('[data-admin-thread]');
+
+if (adminThread) {
+    const pollUrl = adminThread.getAttribute('data-poll-url');
+    const statusSelect = document.querySelector('[data-admin-status]');
+    let lastId = Number(adminThread.getAttribute('data-last-id')) || 0;
+
+    const isNearBottom = () => adminThread.scrollHeight - adminThread.scrollTop - adminThread.clientHeight < 80;
+
+    const appendMessage = (message) => {
+        if (adminThread.querySelector(`[data-message-id="${message.id}"]`)) {
+            return;
+        }
+
+        const isInbound = message.sender !== 'admin';
+
+        const wrapper = document.createElement('div');
+        wrapper.setAttribute('data-message-id', message.id);
+        wrapper.className = `flex flex-col ${isInbound ? 'items-start' : 'items-end'}`;
+
+        const bubble = document.createElement('div');
+        bubble.className = `max-w-[85%] rounded-lg px-4 py-2.5 text-sm leading-relaxed ${isInbound ? 'bg-neutral-100 text-neutral-800' : 'bg-navy-800 text-white'}`;
+        bubble.textContent = message.body;
+
+        const meta = document.createElement('span');
+        meta.className = 'mt-1 text-[11px] text-neutral-400';
+        meta.textContent = `${message.name || (isInbound ? 'Pengunjung' : 'Admin')} · ${message.time}`;
+
+        wrapper.appendChild(bubble);
+        wrapper.appendChild(meta);
+        adminThread.appendChild(wrapper);
+    };
+
+    setInterval(async () => {
+        try {
+            const url = new URL(pollUrl, window.location.origin);
+            url.searchParams.set('after', String(lastId));
+
+            const response = await fetch(url, { headers: { Accept: 'application/json' } });
+
+            if (!response.ok) {
+                return;
+            }
+
+            const data = await response.json();
+            const messages = data.messages ?? [];
+            const wasNearBottom = isNearBottom();
+
+            messages.forEach((message) => {
+                appendMessage(message);
+
+                if (message.id > lastId) {
+                    lastId = message.id;
+                }
+            });
+
+            if (messages.length > 0 && wasNearBottom) {
+                adminThread.scrollTop = adminThread.scrollHeight;
+            }
+
+            if (statusSelect && data.status) {
+                statusSelect.value = data.status;
+            }
+
+            if (typeof data.unread === 'number') {
+                setUnreadBadges(data.unread);
+            }
+        } catch (error) {
+            // Diamkan.
+        }
+    }, 5000);
+}
+
+// Badge pesan belum dibaca di halaman admin lain (mis. dashboard / leads).
+const unreadUrl = document.querySelector('[data-admin-unread-url]')?.getAttribute('data-admin-unread-url');
+
+if (unreadUrl && unreadBadges.length > 0 && !messageLiveList && !adminThread) {
+    setInterval(async () => {
+        try {
+            const response = await fetch(unreadUrl, { headers: { Accept: 'application/json' } });
+
+            if (!response.ok) {
+                return;
+            }
+
+            const data = await response.json();
+
+            if (typeof data.unread === 'number') {
+                setUnreadBadges(data.unread);
+            }
+        } catch (error) {
+            // Diamkan.
+        }
+    }, 20000);
+}

@@ -80,6 +80,11 @@ class SolutionCategoryController extends Controller
     public function destroy(SolutionCategory $solutionCategory): RedirectResponse
     {
         $this->deleteImageFiles($solutionCategory, ['image_path']);
+
+        foreach ($solutionCategory->solutions as $solution) {
+            $this->deleteImageFiles($solution, ['logo_path', 'cover_image_path']);
+        }
+
         $solutionCategory->delete();
 
         return redirect()->route('admin.solution-categories.index')->with('success', 'Kategori solusi berhasil dihapus.');

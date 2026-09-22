@@ -8,8 +8,9 @@
         <div class="mx-auto max-w-7xl px-4 sm:px-6">
             <div class="max-w-3xl py-20 sm:py-28">
                 <p class="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.24em] text-navy-950"><span class="h-px w-10 bg-brand-600" aria-hidden="true"></span>Solusi</p>
-                <h1 class="mt-6 text-4xl font-extrabold leading-[1.05] tracking-tight text-balance text-navy-950 sm:text-6xl">Solusi untuk setiap tantangan bisnis.</h1>
-                <p class="mt-6 max-w-xl text-base leading-relaxed text-neutral-500">Jelajahi portofolio solusi kami — dari manajemen SDM hingga keamanan siber — didukung mitra teknologi global.</p>
+                <h1 class="mt-6 text-4xl font-extrabold leading-[1.05] tracking-tight text-balance text-navy-950 sm:text-6xl">Produk mitra untuk setiap tantangan bisnis.</h1>
+                <p class="mt-6 max-w-xl text-base leading-relaxed text-neutral-500">Solusi adalah produk mitra teknologi global yang kami implementasikan, integrasikan, dan dukung — dikelompokkan per kebutuhan bisnis. Untuk jasa pengembangan custom, lihat <a href="{{ route('layanan.index') }}" class="font-semibold text-brand-700 underline underline-offset-2 transition hover:text-brand-600">Layanan</a>.</p>
+                <a href="{{ route('layanan.index') }}" class="group mt-8 inline-flex items-center gap-2 text-sm font-bold text-navy-950 transition hover:text-brand-700">Lihat layanan kami<svg class="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
 
                 <div class="mt-10 flex flex-wrap items-center gap-x-10 gap-y-4">
                     <div>
@@ -38,7 +39,10 @@
                 <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach($featured as $item)
                         <a href="{{route('solusi.show',[$item->category->slug,$item->slug])}}" class="group relative flex flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white p-8 transition hover:-translate-y-1 hover:border-brand-200 hover:shadow-xl hover:shadow-navy-950/5">
-                            <span class="inline-flex w-fit items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-brand-700">Unggulan</span>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="inline-flex w-fit items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-brand-700">Unggulan</span>
+                                <span class="inline-flex w-fit items-center rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] {{$item->partner_name?'bg-neutral-100 text-neutral-500':'bg-navy-950 text-white'}}">{{$item->partner_name?'Mitra: '.$item->partner_name:'Layanan terkelola'}}</span>
+                            </div>
                             <h3 class="mt-5 text-xl font-extrabold tracking-tight text-navy-950 transition group-hover:text-brand-700">{{$item->title}}</h3>
                             @if($item->subtitle)
                                 <p class="mt-1 text-[13px] font-semibold text-neutral-400">{{$item->subtitle}}</p>

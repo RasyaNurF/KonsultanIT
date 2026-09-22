@@ -19,7 +19,7 @@ class SolutionCategoryRequest extends FormRequest
      */
     public function rules(): array
     {
-        $category = $this->route('solution_category');
+        $category = $this->route('solutionCategory');
 
         return [
             'name' => ['required', 'string', 'max:120'],

@@ -109,6 +109,11 @@ class PortfolioController extends Controller
     public function destroy(Portfolio $portfolio): RedirectResponse
     {
         $this->deleteImageFiles($portfolio, ['thumbnail_path']);
+
+        foreach ($portfolio->images as $image) {
+            $this->deleteImageFiles($image, ['image_path']);
+        }
+
         $portfolio->delete();
 
         return redirect()->route('admin.portfolios.index')->with('success', 'Portfolio berhasil dihapus.');

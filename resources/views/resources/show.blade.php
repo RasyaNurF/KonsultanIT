@@ -45,7 +45,7 @@
     @if($resource->body)
         <section class="border-t border-neutral-100">
             <div class="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20">
-                <div class="prose max-w-none text-[15px] leading-relaxed text-neutral-600">{!!nl2br(e($resource->body))!!}</div>
+                <div class="text-[15px] leading-relaxed text-neutral-600">{!!nl2br(e($resource->body))!!}</div>
             </div>
         </section>
     @endif

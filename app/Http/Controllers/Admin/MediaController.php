@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\MediaRequest;
 use App\Models\Media;
+use App\Support\SvgSanitizer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -38,6 +39,10 @@ class MediaController extends Controller
     {
         $file = $request->file('file');
         $path = $file->store('media', 'public');
+
+        if (is_string($path)) {
+            SvgSanitizer::sanitizeFile(Storage::disk('public')->path($path));
+        }
 
         $medium = Media::create([
             'disk' => 'public',

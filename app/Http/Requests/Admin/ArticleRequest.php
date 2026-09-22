@@ -24,8 +24,11 @@ class ArticleRequest extends FormRequest
      */
     public function rules(): array
     {
+        $article = $this->route('article');
+
         return [
             'title' => ['required', 'string', 'max:200'],
+            'slug' => ['nullable', 'string', 'max:220', Rule::unique('articles', 'slug')->ignore($article?->id)],
             'excerpt' => ['nullable', 'string', 'max:1000'],
             'body' => ['nullable', 'string', 'max:100000'],
             'featured_image_path' => ['nullable', 'string', 'max:255'],

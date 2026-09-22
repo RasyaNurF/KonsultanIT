@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\CareerApplicationRequest;
 use App\Models\CareerApplication;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class CareerApplicationController extends Controller
@@ -55,6 +56,10 @@ class CareerApplicationController extends Controller
 
     public function destroy(CareerApplication $careerApplication): RedirectResponse
     {
+        if (filled($careerApplication->cv_path) && Storage::disk('public')->exists($careerApplication->cv_path)) {
+            Storage::disk('public')->delete($careerApplication->cv_path);
+        }
+
         $careerApplication->delete();
 
         return redirect()->route('admin.career-applications.index')->with('success', 'Lamaran berhasil dihapus.');

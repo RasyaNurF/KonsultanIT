@@ -78,6 +78,22 @@ class UserController extends Controller
     public function update(UserRequest $request, User $user): RedirectResponse
     {
         $data = $request->validated();
+        $role = AdminRole::tryFrom($data['role'] ?? '') ?? $user->role;
+        $isActive = $request->boolean('is_active');
+
+        // Cegah kehilangan Super Admin aktif terakhir (mis. menurunkan atau
+        // menonaktifkan diri sendiri / satu-satunya Super Admin aktif).
+        if ($user->isSuperAdmin() && ($role !== AdminRole::SuperAdmin || ! $isActive)) {
+            abort_if(
+                User::query()
+                    ->where('role', AdminRole::SuperAdmin->value)
+                    ->where('is_active', true)
+                    ->whereKeyNot($user->getKey())
+                    ->doesntExist(),
+                403,
+                'Minimal harus ada satu Super Admin aktif.',
+            );
+        }
 
         if (filled($data['password'] ?? null)) {
             $data['password'] = $request->input('password');
@@ -87,7 +103,7 @@ class UserController extends Controller
 
         $user->update([
             ...$data,
-            'is_active' => $request->boolean('is_active'),
+            'is_active' => $isActive,
         ]);
 
         return redirect()->route('admin.users.index')->with('success', 'Pengguna berhasil diperbarui.');
@@ -98,7 +114,15 @@ class UserController extends Controller
         abort_if($user->is(auth()->user()), 403, 'Tidak dapat menghapus akun sendiri.');
 
         if ($user->isSuperAdmin()) {
-            abort_if(User::query()->where('role', AdminRole::SuperAdmin->value)->count() <= 1, 403, 'Minimal harus ada satu Super Admin.');
+            abort_if(
+                User::query()
+                    ->where('role', AdminRole::SuperAdmin->value)
+                    ->where('is_active', true)
+                    ->whereKeyNot($user->getKey())
+                    ->doesntExist(),
+                403,
+                'Minimal harus ada satu Super Admin aktif.',
+            );
         }
 
         $user->delete();

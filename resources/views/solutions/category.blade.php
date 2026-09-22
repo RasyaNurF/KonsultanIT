@@ -58,9 +58,7 @@
                                 @endif
                             </div>
                             <div class="flex flex-1 flex-col p-6">
-                                @if($solution->partner_name)
-                                    <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-neutral-400">{{$solution->partner_name}}</p>
-                                @endif
+                                <p class="inline-flex w-fit items-center rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] {{$solution->partner_name?'bg-neutral-100 text-neutral-500':'bg-brand-50 text-brand-700'}}">{{$solution->partner_name?'Mitra: '.$solution->partner_name:'Layanan terkelola'}}</p>
                                 <h2 class="mt-2 text-lg font-bold tracking-tight text-navy-950 transition group-hover:text-brand-700">{{$solution->title}}</h2>
                                 @if($solution->excerpt)
                                     <p class="mt-2 flex-1 text-sm leading-relaxed text-neutral-500">{{\Illuminate\Support\Str::limit($solution->excerpt, 120)}}</p>

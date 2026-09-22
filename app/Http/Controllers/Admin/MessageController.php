@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\MessageReplyRequest;
 use App\Models\ChatMessage;
 use App\Models\ChatParticipant;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -16,15 +18,6 @@ class MessageController extends Controller
 {
     public function index(Request $request): View
     {
-        $participants = ChatParticipant::query()
-            ->search($request->string('q')->toString())
-            ->withStatus($request->string('status')->toString())
-            ->withCount('messages')
-            ->with('messages')
-            ->orderByDesc('last_message_at')
-            ->paginate(15)
-            ->withQueryString();
-
         return view('admin.messages.index', [
             'breadcrumbs' => [
                 ['label' => 'Dashboard', 'url' => route('admin.dashboard')],
@@ -32,8 +25,62 @@ class MessageController extends Controller
             ],
             'searchPlaceholder' => 'Cari nama, email, atau subjek…',
             'searchAction' => route('admin.messages.index'),
-            'participants' => $participants,
+            'participants' => $this->participants($request),
             'statuses' => MessageStatus::cases(),
+        ]);
+    }
+
+    /**
+     * Jumlah percakapan belum dibaca untuk badge sidebar/topbar (polling).
+     */
+    public function unread(): JsonResponse
+    {
+        return response()->json(['unread' => $this->unreadCount()]);
+    }
+
+    /**
+     * Render ulang daftar percakapan sebagai HTML agar halaman indeks tetap segar.
+     */
+    public function live(Request $request): JsonResponse
+    {
+        return response()->json([
+            'html' => view('admin.messages.partials.list', [
+                'participants' => $this->participants($request),
+            ])->render(),
+            'unread' => $this->unreadCount(),
+        ]);
+    }
+
+    /**
+     * Pesan baru pada satu percakapan; dipanggil berkala saat admin membuka thread.
+     */
+    public function poll(Request $request, ChatParticipant $participant): JsonResponse
+    {
+        $after = $request->integer('after');
+
+        $messages = $participant->messages()
+            ->when($after > 0, fn ($query) => $query->where('id', '>', $after))
+            ->oldest()
+            ->get();
+
+        if ($participant->status === MessageStatus::Unread->value) {
+            $participant->update(['status' => MessageStatus::Read->value]);
+            $participant->messages()->update(['is_read' => true]);
+        }
+
+        $status = MessageStatus::from($participant->status);
+
+        return response()->json([
+            'messages' => $messages->map(fn (ChatMessage $message): array => [
+                'id' => $message->id,
+                'sender' => $message->sender,
+                'name' => $message->name,
+                'body' => $message->body,
+                'time' => $message->created_at->format('H:i d M'),
+            ])->values(),
+            'status' => $status->value,
+            'status_label' => $status->label(),
+            'unread' => $this->unreadCount(),
         ]);
     }
 
@@ -94,5 +141,24 @@ class MessageController extends Controller
         $participant->delete();
 
         return redirect()->route('admin.messages.index')->with('success', 'Percakapan berhasil dihapus.');
+    }
+
+    private function participants(Request $request): LengthAwarePaginator
+    {
+        return ChatParticipant::query()
+            ->search($request->string('q')->toString())
+            ->withStatus($request->string('status')->toString())
+            ->withCount('messages')
+            ->with('messages')
+            ->orderByDesc('last_message_at')
+            ->paginate(15)
+            ->withQueryString();
+    }
+
+    private function unreadCount(): int
+    {
+        return ChatParticipant::query()
+            ->where('status', MessageStatus::Unread->value)
+            ->count();
     }
 }

@@ -35,6 +35,8 @@ $paths = [
     'upload' => '<path d="M12 20V9"/><path d="m8 13 4-4 4 4"/><path d="M5 4h14"/>',
     'link' => '<path d="M10 14a4 4 0 0 1 0-5.6l3-3a4 4 0 0 1 5.6 5.6l-1.6 1.6"/><path d="M14 10a4 4 0 0 1 0 5.6l-3 3a4 4 0 0 1-5.6-5.6l1.6-1.6"/>',
     'calendar' => '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/>',
+    'megaphone' => '<path d="M4 9v6l10 4V5L4 9Z"/><path d="M14 7.5a5 5 0 0 1 0 9"/><path d="M7 15v3a1 1 0 0 0 1 1h1"/>',
+    'cookie' => '<circle cx="12" cy="12" r="9"/><circle cx="9" cy="9.5" r="1" fill="currentColor" stroke="none"/><circle cx="14.5" cy="9" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="14.5" r="1" fill="currentColor" stroke="none"/><circle cx="9.5" cy="15" r="1" fill="currentColor" stroke="none"/>',
     'tag' => '<path d="M3 12V4h8l10 10-8 8-10-10Z"/><circle cx="8" cy="8" r="1.4"/>',
 ];
 

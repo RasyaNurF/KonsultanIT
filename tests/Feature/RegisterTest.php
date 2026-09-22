@@ -42,7 +42,7 @@ class RegisterTest extends TestCase
         $this->get(route('admin.dashboard'))->assertForbidden();
     }
 
-    public function test_registered_user_is_redirected_away_from_admin_dashboard(): void
+    public function test_registered_user_can_open_their_dashboard_and_inbox(): void
     {
         $this->post(route('register'), [
             'name' => 'Sinta Dewi',
@@ -51,7 +51,13 @@ class RegisterTest extends TestCase
             'password_confirmation' => 'rahasia-aman-123',
         ]);
 
-        $this->get(route('dashboard'))->assertRedirect(route('home'));
+        $this->get(route('dashboard'))
+            ->assertOk()
+            ->assertSee('Total Pesan');
+
+        $this->get(route('pesan.index'))
+            ->assertOk()
+            ->assertJsonStructure(['messages']);
     }
 
     public function test_registration_rejects_mismatched_password_confirmation(): void

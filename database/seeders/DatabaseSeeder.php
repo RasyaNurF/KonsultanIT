@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SolutionContentSeeder::class);
         $this->call(ResourceContentSeeder::class);
         $this->call(ArticleContentSeeder::class);
+        $this->call(AnnouncementSeeder::class);
 
         User::query()->updateOrCreate(
             ['email' => 'admin@nusakode.id'],

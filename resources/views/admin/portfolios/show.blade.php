@@ -21,7 +21,7 @@
     </x-slot:actions>
 </x-admin.page-header>
 
-<div class="mt-8 grid gap-8 lg:grid-cols-[1.6fr_1fr]">
+<div class="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
     <div class="min-w-0 space-y-8">
         @if ($portfolio->thumbnail_path)
             <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($portfolio->thumbnail_path) }}" alt="{{ $portfolio->title }}" class="aspect-video w-full rounded-lg border border-neutral-200 object-cover">

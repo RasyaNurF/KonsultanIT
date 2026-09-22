@@ -28,7 +28,9 @@ class CareerRequest extends FormRequest
             'requirements' => ['nullable', 'string', 'max:10000'],
             'responsibilities' => ['nullable', 'string', 'max:10000'],
             'salary_range' => ['nullable', 'string', 'max:120'],
-            'deadline' => ['nullable', 'date', 'after_or_equal:today'],
+            'deadline' => $this->isMethod('post')
+                ? ['nullable', 'date', 'after_or_equal:today']
+                : ['nullable', 'date'],
             'is_remote' => ['sometimes', 'boolean'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'status' => ['required', Rule::enum(PublishStatus::class)],

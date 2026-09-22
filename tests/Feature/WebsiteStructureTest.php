@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Enums\AnnouncementPlacement;
 use App\Enums\PublishStatus;
+use App\Models\Announcement;
 use App\Models\Client;
 use App\Models\Industry;
 use App\Models\Service;
@@ -28,8 +30,17 @@ class WebsiteStructureTest extends TestCase
 
     public function test_homepage_has_promo_banner_solution_menu_and_interactive_tabs(): void
     {
+        Announcement::create([
+            'placement' => AnnouncementPlacement::Bar,
+            'message' => 'Butuh software untuk bisnis Anda?',
+            'link_label' => 'Konsultasi gratis',
+            'link_url' => '/kontak',
+            'is_active' => true,
+        ]);
+
         $this->get('/')
             ->assertOk()
+            ->assertSee('Butuh software untuk bisnis Anda?')
             ->assertSee('Konsultasi gratis')
             ->assertSee('Pilih solusi sesuai kebutuhan Anda')
             ->assertSee('Pelajari Selengkapnya')

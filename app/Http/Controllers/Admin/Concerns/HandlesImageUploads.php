@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Concerns;
 
+use App\Support\SvgSanitizer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -43,6 +44,8 @@ trait HandlesImageUploads
 
                 continue;
             }
+
+            SvgSanitizer::sanitizeFile(Storage::disk('public')->path($path));
 
             $this->deleteImageFile($current);
             $data[$field] = $path;

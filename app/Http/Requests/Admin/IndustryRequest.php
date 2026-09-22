@@ -24,8 +24,11 @@ class IndustryRequest extends FormRequest
      */
     public function rules(): array
     {
+        $industry = $this->route('industry');
+
         return [
             'name' => ['required', 'string', 'max:150'],
+            'slug' => ['nullable', 'string', 'max:180', Rule::unique('industries', 'slug')->ignore($industry?->id)],
             'description' => ['nullable', 'string', 'max:5000'],
             'image_path' => ['nullable', 'string', 'max:255'],
             'image_path_file' => ['nullable', 'image:allow_svg', 'mimes:jpg,jpeg,png,webp,gif,svg', 'max:5120'],
