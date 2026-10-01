@@ -404,6 +404,52 @@ if (solusiTabs.length > 0) {
     });
 }
 
+// --- Tab kategori solusi pada dropdown navbar ---
+const navSolutionTabs = document.querySelectorAll('[data-nav-solusi-tab]');
+const navSolutionPanels = document.querySelectorAll('[data-nav-solusi-panel]');
+
+if (navSolutionTabs.length > 0) {
+    const activateNavSolutionTab = (tab, focus = false) => {
+        const index = tab.getAttribute('data-nav-solusi-tab');
+
+        navSolutionTabs.forEach((other) => {
+            const active = other === tab;
+            other.setAttribute('aria-selected', String(active));
+            other.tabIndex = active ? 0 : -1;
+        });
+
+        navSolutionPanels.forEach((panel) => {
+            panel.hidden = panel.getAttribute('data-nav-solusi-panel') !== index;
+        });
+
+        if (focus) {
+            tab.focus();
+        }
+    };
+
+    navSolutionTabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => activateNavSolutionTab(tab));
+        tab.addEventListener('keydown', (event) => {
+            let nextIndex;
+
+            if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
+                nextIndex = (index + 1) % navSolutionTabs.length;
+            } else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
+                nextIndex = (index - 1 + navSolutionTabs.length) % navSolutionTabs.length;
+            } else if (event.key === 'Home') {
+                nextIndex = 0;
+            } else if (event.key === 'End') {
+                nextIndex = navSolutionTabs.length - 1;
+            } else {
+                return;
+            }
+
+            event.preventDefault();
+            activateNavSolutionTab(navSolutionTabs[nextIndex], true);
+        });
+    });
+}
+
 // Reveal on scroll: blok section muncul halus, item daftar menyusul berurutan.
 const listItems = document.querySelectorAll(
     '#solusi .solusi-tabs > button, #portofolio article, #insight .divide-y > a'

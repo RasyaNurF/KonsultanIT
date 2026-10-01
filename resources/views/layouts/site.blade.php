@@ -55,29 +55,72 @@
 
                     <svg class="h-3.5 w-3.5 transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
                 </a>
-                <div class="invisible absolute left-1/2 top-full w-[560px] max-w-[calc(100vw-2rem)] -translate-x-1/2 translate-y-2 pt-4 opacity-0 transition duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
-                    <div class="overflow-hidden rounded-2xl bg-navy-950 text-left shadow-2xl shadow-navy-950/40 ring-1 ring-white/10">
-                        <div class="grid grid-cols-2 gap-1 p-3">
-                                        @forelse (($navSolutionCategories ?? collect()) as $navCategory)
+                <div class="invisible absolute left-1/2 top-full w-[min(92vw,900px)] max-w-[calc(100vw-2rem)] -translate-x-[15%] translate-y-2 pt-4 opacity-0 transition duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                    <div class="grid max-h-[min(70vh,500px)] grid-cols-[14rem_minmax(0,1fr)] overflow-hidden rounded-xl bg-white text-left shadow-2xl shadow-navy-950/25 ring-1 ring-neutral-200">
+                        <aside class="flex min-h-0 flex-col bg-slate-100 p-4">
+                            <p class="text-[11px] font-extrabold uppercase tracking-[0.14em] text-slate-500">Navigasi</p>
+                            <nav class="mt-3 min-h-0 flex-1 space-y-1 overflow-y-auto" role="tablist" aria-label="Kategori solusi" aria-orientation="vertical">
+                                @forelse (($navSolutionCategories ?? collect()) as $navCategory)
+                                    <button type="button" role="tab" id="nav-solusi-tab-{{ $loop->index }}" data-nav-solusi-tab="{{ $loop->index }}" aria-controls="nav-solusi-panel-{{ $loop->index }}" aria-selected="{{ $loop->first ? 'true' : 'false' }}" tabindex="{{ $loop->first ? '0' : '-1' }}" class="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2.5 text-left text-[13px] font-bold text-slate-800 transition hover:bg-white hover:text-blue-800 aria-selected:bg-white aria-selected:text-blue-800">
+                                        <span class="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-white text-blue-800" aria-hidden="true">
+                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10.5 12 5l8 5.5M6.5 9.5v8h11v-8M9 17.5v-5h6v5M3 20h18"/></svg>
+                                        </span>
+                                        <span class="min-w-0">{{ $navCategory->name }}</span>
+                                    </button>
+                                @empty
+                                    <a href="{{ route('solusi.index') }}" class="block rounded-lg px-2.5 py-2.5 text-[13px] font-bold text-slate-800 transition hover:bg-white hover:text-blue-800">Semua Solusi</a>
+                                @endforelse
+                            </nav>
+                            <div class="mt-4 border-t border-slate-200 pt-3">
+                                <p class="text-xs leading-relaxed text-slate-700">Tertarik bekerja sama dengan kami?</p>
+                                <a href="{{ route('kontak') }}" class="mt-2 flex min-h-10 items-center justify-center rounded-lg bg-blue-800 px-3 py-2 text-center text-xs font-bold text-white transition hover:bg-blue-900">Minta Demo</a>
+                                <a href="{{ route('solusi.index') }}" class="mt-2 flex min-h-10 items-center justify-center rounded-lg border border-blue-700 bg-white px-3 py-2 text-center text-xs font-bold text-blue-800 transition hover:bg-blue-50">Lihat Semua Solusi</a>
+                            </div>
+                        </aside>
 
-                <a href="{{ route('solusi.category', $navCategory->slug) }}" class="rounded-xl px-4 py-3 transition hover:bg-white/10">
-                    <span class="block text-sm font-bold text-white">{{ $navCategory->name }}</span>
-                    <span class="mt-0.5 block truncate text-xs text-neutral-400">{{ \Illuminate\Support\Str::limit($navCategory->tagline ?? $navCategory->description ?? 'Solusi untuk kebutuhan bisnis Anda.', 64) }}</span>
-                </a>
-            @empty
-                @foreach (['Human Capital Management' => 'SDM, payroll, dan talenta.', 'CRM & Customer Experience' => 'Layanan dan penjualan pelanggan.', 'Infrastruktur TI' => 'Cloud, monitoring, dan dokumen.', 'IT Security' => 'Perlindungan endpoint dan data.', 'ERP & Business Intelligence' => 'ERP dan analitik bisnis.'] as $title => $desc)
-                    <a href="{{ route('solusi.index') }}" class="rounded-xl px-4 py-3 transition hover:bg-white/10">
-                        <span class="block text-sm font-bold text-white">{{ $title }}</span>
-                        <span class="mt-0.5 block truncate text-xs text-neutral-400">{{ $desc }}</span>
-                    </a>
-                @endforeach
-            @endforelse
-
+                        <div class="min-w-0 overflow-y-auto p-4 sm:p-5">
+                            @forelse (($navSolutionCategories ?? collect()) as $navCategory)
+                                <section id="nav-solusi-panel-{{ $loop->index }}" data-nav-solusi-panel="{{ $loop->index }}" role="tabpanel" aria-labelledby="nav-solusi-tab-{{ $loop->index }}" @if (! $loop->first) hidden @endif>
+                                    <div class="mb-4 border-b border-neutral-100 pb-3">
+                                        <div class="flex items-start justify-between gap-3">
+                                            <div class="min-w-0">
+                                                <p class="text-[10px] font-extrabold uppercase tracking-[0.13em] text-slate-500">Solusi</p>
+                                                <h2 class="mt-1 text-base font-extrabold text-navy-950">{{ $navCategory->name }}</h2>
+                                            </div>
+                                            <a href="{{ route('solusi.category', $navCategory->slug) }}" class="shrink-0 pt-4 text-[11px] font-bold text-blue-800 transition hover:text-blue-600">Lihat kategori <span aria-hidden="true">&rarr;</span></a>
+                                        </div>
+                                        @if ($navCategory->tagline || $navCategory->description)
+                                            <p class="mt-1 text-xs leading-relaxed text-slate-500">{{ \Illuminate\Support\Str::limit($navCategory->tagline ?: $navCategory->description, 90) }}</p>
+                                        @endif
+                                    </div>
+                                    <div class="grid gap-2 sm:grid-cols-2">
+                                        @forelse ($navCategory->solutions as $navSolution)
+                                            <a href="{{ route('solusi.show', [$navCategory->slug, $navSolution->slug]) }}" class="group flex min-h-[58px] min-w-0 items-center gap-2.5 rounded-lg border border-neutral-100 p-2.5 transition hover:border-blue-200 hover:bg-blue-50/40">
+                                                <span class="grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-md bg-slate-50 p-1">
+                                                    @if ($navSolution->logo_path)
+                                                        <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($navSolution->logo_path) }}" alt="Logo {{ $navSolution->title }}" class="max-h-full max-w-full object-contain" loading="lazy">
+                                                    @else
+                                                        <span class="text-xs font-extrabold text-blue-800" aria-hidden="true">{{ \Illuminate\Support\Str::upper(\Illuminate\Support\Str::substr($navSolution->title, 0, 2)) }}</span>
+                                                    @endif
+                                                </span>
+                                                <span class="min-w-0">
+                                                    <span class="block truncate text-xs font-bold text-slate-900 transition group-hover:text-blue-800">{{ $navSolution->title }}</span>
+                                                    @if ($navSolution->subtitle || $navSolution->excerpt)
+                                                        <span class="mt-0.5 block truncate text-[11px] text-slate-500">{{ $navSolution->subtitle ?: $navSolution->excerpt }}</span>
+                                                    @elseif ($navSolution->partner_name)
+                                                        <span class="mt-0.5 block truncate text-[11px] text-slate-500">{{ $navSolution->partner_name }}</span>
+                                                    @endif
+                                                </span>
+                                            </a>
+                                        @empty
+                                            <p class="col-span-full rounded-lg border border-dashed border-neutral-200 px-3 py-4 text-xs text-slate-500">Solusi segera hadir.</p>
+                                        @endforelse
+                                    </div>
+                                </section>
+                            @empty
+                                <p class="rounded-lg border border-dashed border-neutral-200 px-4 py-6 text-sm text-slate-500">Daftar solusi segera hadir.</p>
+                            @endforelse
                         </div>
-                        <a href="{{ route('kontak') }}" class="group/cta flex items-center justify-between gap-4 bg-white/5 px-6 py-3.5 text-[13px] font-bold text-white transition hover:bg-white/10">
-                            Butuh solusi yang disesuaikan? Konsultasi gratis
-                            <svg class="h-4 w-4 transition-transform group-hover/cta:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                        </a>
                     </div>
                 </div>
             </div>
@@ -179,6 +222,7 @@
             <a href="{{ url('/') }}" class="block rounded-xl px-3 py-2.5 hover:bg-white/10">Beranda</a>
             <a href="{{ route('layanan.index') }}" class="block rounded-xl px-3 py-2.5 hover:bg-white/10">Layanan</a>
             <p class="px-3 pb-1 pt-3 text-[11px] font-bold uppercase tracking-[0.18em] text-neutral-500">Solusi</p>
+            <a href="{{ route('solusi.index') }}" class="block rounded-xl px-3 py-2.5 font-bold text-white hover:bg-white/10">Semua Solusi</a>
                         @forelse (($navSolutionCategories ?? collect()) as $navCategory)
 
                 <a href="{{ route('solusi.category', $navCategory->slug) }}" class="rounded-xl px-4 py-3 transition hover:bg-white/10">

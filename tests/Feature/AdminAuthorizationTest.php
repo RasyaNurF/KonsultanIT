@@ -20,6 +20,36 @@ class AdminAuthorizationTest extends TestCase
         $this->actingAs($editor)->get(route('admin.settings.edit'))->assertForbidden();
     }
 
+    public function test_sidebar_only_shows_modules_the_editor_can_view(): void
+    {
+        $editor = User::factory()->editor()->create();
+
+        $response = $this->actingAs($editor)->get(route('admin.dashboard'))->assertOk();
+        $previousLibxmlErrorSetting = libxml_use_internal_errors(true);
+        $document = new \DOMDocument;
+
+        try {
+            $document->loadHTML($response->getContent());
+        } finally {
+            libxml_clear_errors();
+            libxml_use_internal_errors($previousLibxmlErrorSetting);
+        }
+
+        $xpath = new \DOMXPath($document);
+        $sidebarLinks = $xpath->query('//aside[@data-admin-sidebar]//a');
+        $sidebarHrefs = [];
+
+        foreach ($sidebarLinks as $link) {
+            $sidebarHrefs[] = $link->getAttribute('href');
+        }
+
+        $this->assertContains(route('admin.services.index'), $sidebarHrefs);
+        $this->assertContains(route('admin.articles.index'), $sidebarHrefs);
+        $this->assertNotContains(route('admin.leads.index'), $sidebarHrefs);
+        $this->assertNotContains(route('admin.projects.index'), $sidebarHrefs);
+        $this->assertNotContains(route('admin.users.index'), $sidebarHrefs);
+    }
+
     public function test_admin_can_open_operations_but_not_users(): void
     {
         $admin = User::factory()->create();

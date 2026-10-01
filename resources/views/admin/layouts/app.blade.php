@@ -11,13 +11,13 @@
     <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-neutral-50 text-neutral-800 antialiased">
+<body class="bg-white text-neutral-800 antialiased">
 
 <div class="min-h-screen lg:pl-[256px]" data-admin-shell>
 
     {{-- ============ SIDEBAR ============ --}}
     <aside data-admin-sidebar
-        class="fixed bottom-0 left-0 top-0 z-50 flex w-[256px] -translate-x-full flex-col border-r border-white/10 bg-[#071A2B] transition-transform duration-200 ease-out lg:translate-x-0"
+        class="fixed bottom-0 left-0 top-0 z-50 flex w-[256px] -translate-x-full flex-col border-r border-white/10 bg-[#123653] transition-transform duration-200 ease-out lg:translate-x-0"
         aria-label="Navigasi admin">
         <div class="flex h-16 shrink-0 items-center justify-between px-5">
             <a href="{{ route('admin.dashboard') }}" class="flex flex-col leading-none">
@@ -46,7 +46,7 @@
             @endif
 
             @if (auth()->user()->hasAbility('project.view') || auth()->user()->hasAbility('portfolio.view'))
-                <x-admin.nav-section label="Proyek" :routes="['admin.projects.*', 'admin.portfolios.*']" />
+                <x-admin.nav-section label="Operasional" :routes="['admin.projects.*', 'admin.portfolios.*']" />
                 @if (auth()->user()->hasAbility('project.view'))
                     <x-admin.nav-link :href="route('admin.projects.index')" icon="kanban" :active="request()->routeIs('admin.projects.*')">Proyek</x-admin.nav-link>
                 @endif
@@ -55,31 +55,69 @@
                 @endif
             @endif
 
-            <x-admin.nav-section label="Konten" :routes="['admin.services.*', 'admin.solution-categories.*', 'admin.solutions.*', 'admin.resources.*', 'admin.industries.*',
- 'admin.articles.*', 'admin.blog-categories.*', 'admin.testimonials.*', 'admin.teams.*', 'admin.heroes.*', 'admin.media.*']" />
-            <x-admin.nav-link :href="route('admin.services.index')" icon="layers" :active="request()->routeIs('admin.services.*')">Layanan</x-admin.nav-link>
-<x-admin.nav-link :href="route('admin.solution-categories.index')" icon="layers" :active="request()->routeIs('admin.solution-categories.*')">Kategori Solusi</x-admin.nav-link>
-<x-admin.nav-link :href="route('admin.solutions.index')" icon="layers" :active="request()->routeIs('admin.solutions.*')">Solusi</x-admin.nav-link>
-<x-admin.nav-link :href="route('admin.resources.index')" icon="article" :active="request()->routeIs('admin.resources.*')">Resources</x-admin.nav-link>
+            @if (auth()->user()->hasAbility('service.view') || auth()->user()->hasAbility('solution-category.view') || auth()->user()->hasAbility('solution.view') || auth()->user()->hasAbility('resource.view') || auth()->user()->hasAbility('industry.view') || auth()->user()->hasAbility('article.view') || auth()->user()->hasAbility('blog-category.view'))
+                <x-admin.nav-section label="Konten Website" :routes="['admin.services.*', 'admin.solution-categories.*', 'admin.solutions.*', 'admin.resources.*', 'admin.industries.*', 'admin.articles.*', 'admin.blog-categories.*']" />
+                @if (auth()->user()->hasAbility('service.view'))
+                    <x-admin.nav-link :href="route('admin.services.index')" icon="layers" :active="request()->routeIs('admin.services.*')">Layanan</x-admin.nav-link>
+                @endif
+                @if (auth()->user()->hasAbility('solution.view'))
+                    <x-admin.nav-link :href="route('admin.solutions.index')" icon="layers" :active="request()->routeIs('admin.solutions.*')">Solusi</x-admin.nav-link>
+                @endif
+                @if (auth()->user()->hasAbility('solution-category.view'))
+                    <div class="ml-5 border-l border-white/10 pl-2">
+                        <x-admin.nav-link :href="route('admin.solution-categories.index')" icon="layers" :active="request()->routeIs('admin.solution-categories.*')">Kategori Solusi</x-admin.nav-link>
+                    </div>
+                @endif
+                @if (auth()->user()->hasAbility('resource.view'))
+                    <x-admin.nav-link :href="route('admin.resources.index')" icon="article" :active="request()->routeIs('admin.resources.*')">Resources</x-admin.nav-link>
+                @endif
+                @if (auth()->user()->hasAbility('industry.view'))
+                    <x-admin.nav-link :href="route('admin.industries.index')" icon="factory" :active="request()->routeIs('admin.industries.*')">Industri</x-admin.nav-link>
+                @endif
+                @if (auth()->user()->hasAbility('article.view'))
+                    <x-admin.nav-link :href="route('admin.articles.index')" icon="article" :active="request()->routeIs('admin.articles.*')">Artikel</x-admin.nav-link>
+                @endif
+                @if (auth()->user()->hasAbility('blog-category.view'))
+                    <div class="ml-5 border-l border-white/10 pl-2">
+                        <x-admin.nav-link :href="route('admin.blog-categories.index')" icon="article" :active="request()->routeIs('admin.blog-categories.*')">Kategori Blog</x-admin.nav-link>
+                    </div>
+                @endif
+            @endif
 
-            <x-admin.nav-link :href="route('admin.industries.index')" icon="factory" :active="request()->routeIs('admin.industries.*')">Industri</x-admin.nav-link>
-            <x-admin.nav-link :href="route('admin.articles.index')" icon="article" :active="request()->routeIs('admin.articles.*')">Artikel</x-admin.nav-link>
-            <x-admin.nav-link :href="route('admin.blog-categories.index')" icon="article" :active="request()->routeIs('admin.blog-categories.*')">Kategori Blog</x-admin.nav-link>
-            <x-admin.nav-link :href="route('admin.testimonials.index')" icon="quote" :active="request()->routeIs('admin.testimonials.*')">Testimonial</x-admin.nav-link>
-            <x-admin.nav-link :href="route('admin.teams.index')" icon="users" :active="request()->routeIs('admin.teams.*')">Tim</x-admin.nav-link>
-            <x-admin.nav-link :href="route('admin.heroes.index')" icon="image" :active="request()->routeIs('admin.heroes.*')">Hero</x-admin.nav-link>
-            <x-admin.nav-link :href="route('admin.media.index')" icon="image" :active="request()->routeIs('admin.media.*')">Media</x-admin.nav-link>
+            @if (auth()->user()->hasAbility('company.view') || auth()->user()->hasAbility('team.view') || auth()->user()->hasAbility('testimonial.view') || auth()->user()->hasAbility('career.view'))
+                <x-admin.nav-section label="Perusahaan" :routes="['admin.company.*', 'admin.teams.*', 'admin.testimonials.*', 'admin.careers.*', 'admin.career-applications.*']" />
+                @if (auth()->user()->hasAbility('company.view'))
+                    <x-admin.nav-link :href="route('admin.company.edit')" icon="building" :active="request()->routeIs('admin.company.*')">Profil Perusahaan</x-admin.nav-link>
+                @endif
+                @if (auth()->user()->hasAbility('team.view'))
+                    <x-admin.nav-link :href="route('admin.teams.index')" icon="users" :active="request()->routeIs('admin.teams.*')">Tim</x-admin.nav-link>
+                @endif
+                @if (auth()->user()->hasAbility('testimonial.view'))
+                    <x-admin.nav-link :href="route('admin.testimonials.index')" icon="quote" :active="request()->routeIs('admin.testimonials.*')">Testimonial</x-admin.nav-link>
+                @endif
+                @if (auth()->user()->hasAbility('career.view'))
+                    <x-admin.nav-link :href="route('admin.careers.index')" icon="briefcase" :active="request()->routeIs('admin.careers.*')">Karier</x-admin.nav-link>
+                    <x-admin.nav-link :href="route('admin.career-applications.index')" icon="inbox" :active="request()->routeIs('admin.career-applications.*')">Lamaran</x-admin.nav-link>
+                @endif
+            @endif
 
-            <x-admin.nav-section label="Perusahaan" :routes="['admin.company.*', 'admin.careers.*', 'admin.career-applications.*']" />
-            <x-admin.nav-link :href="route('admin.company.edit')" icon="building" :active="request()->routeIs('admin.company.*')">Profil Perusahaan</x-admin.nav-link>
-            <x-admin.nav-link :href="route('admin.careers.index')" icon="briefcase" :active="request()->routeIs('admin.careers.*')">Karier</x-admin.nav-link>
-            <x-admin.nav-link :href="route('admin.career-applications.index')" icon="inbox" :active="request()->routeIs('admin.career-applications.*')">Lamaran</x-admin.nav-link>
-
-            <x-admin.nav-section label="Website" :routes="['admin.seo.*', 'admin.settings.*', 'admin.announcements.*']" />
-            <x-admin.nav-link :href="route('admin.seo.index')" icon="search" :active="request()->routeIs('admin.seo.*')">SEO</x-admin.nav-link>
-            <x-admin.nav-link :href="route('admin.announcements.index')" icon="megaphone" :active="request()->routeIs('admin.announcements.*')">Pengumuman</x-admin.nav-link>
-            @if (auth()->user()->hasAbility('settings.view'))
-                <x-admin.nav-link :href="route('admin.settings.edit')" icon="settings" :active="request()->routeIs('admin.settings.*')">Pengaturan</x-admin.nav-link>
+            @if (auth()->user()->hasAbility('seo.view') || auth()->user()->hasAbility('announcement.view') || auth()->user()->hasAbility('hero.view') || auth()->user()->hasAbility('media.view') || auth()->user()->hasAbility('settings.view'))
+                <x-admin.nav-section label="Website & Pengaturan" :routes="['admin.seo.*', 'admin.announcements.*', 'admin.heroes.*', 'admin.media.*', 'admin.settings.*']" />
+                @if (auth()->user()->hasAbility('seo.view'))
+                    <x-admin.nav-link :href="route('admin.seo.index')" icon="search" :active="request()->routeIs('admin.seo.*')">SEO</x-admin.nav-link>
+                @endif
+                @if (auth()->user()->hasAbility('announcement.view'))
+                    <x-admin.nav-link :href="route('admin.announcements.index')" icon="megaphone" :active="request()->routeIs('admin.announcements.*')">Pengumuman</x-admin.nav-link>
+                @endif
+                @if (auth()->user()->hasAbility('hero.view'))
+                    <x-admin.nav-link :href="route('admin.heroes.index')" icon="image" :active="request()->routeIs('admin.heroes.*')">Hero</x-admin.nav-link>
+                @endif
+                @if (auth()->user()->hasAbility('media.view'))
+                    <x-admin.nav-link :href="route('admin.media.index')" icon="image" :active="request()->routeIs('admin.media.*')">Media</x-admin.nav-link>
+                @endif
+                @if (auth()->user()->hasAbility('settings.view'))
+                    <x-admin.nav-link :href="route('admin.settings.edit')" icon="settings" :active="request()->routeIs('admin.settings.*')">Pengaturan</x-admin.nav-link>
+                @endif
             @endif
 
             @if (auth()->user()->hasAbility('user.view') || auth()->user()->hasAbility('profile.manage'))

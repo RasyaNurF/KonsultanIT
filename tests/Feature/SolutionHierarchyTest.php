@@ -45,16 +45,32 @@ class SolutionHierarchyTest extends TestCase
             'title' => 'Haermes HRIS',
             'status' => PublishStatus::Published,
         ]);
-        Solution::create([
+        $otherSolution = Solution::create([
             'solution_category_id' => $other->id,
             'title' => 'Managed Detection',
             'status' => PublishStatus::Published,
         ]);
 
-        $this->get(route('solusi.category', $category->slug))
+        $response = $this->get(route('solusi.category', $category->slug))
             ->assertOk()
             ->assertSee('Haermes HRIS')
-            ->assertDontSee('Managed Detection');
+            ->assertSee(route('solusi.show', [$other->slug, $otherSolution->slug]));
+
+        $previousLibxmlErrorSetting = libxml_use_internal_errors(true);
+        $document = new \DOMDocument;
+
+        try {
+            $document->loadHTML($response->getContent());
+        } finally {
+            libxml_clear_errors();
+            libxml_use_internal_errors($previousLibxmlErrorSetting);
+        }
+
+        $mainContent = $document->getElementById('main');
+
+        $this->assertNotNull($mainContent);
+        $this->assertStringContainsString('Haermes HRIS', $mainContent->textContent);
+        $this->assertStringNotContainsString('Managed Detection', $mainContent->textContent);
     }
 
     public function test_solution_detail_is_reachable_and_scoped_to_category(): void
