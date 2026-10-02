@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Cache;
 
 class ChatParticipant extends Model
 {
@@ -61,6 +62,27 @@ class ChatParticipant extends Model
         if ($latestId !== null && (int) $latestId > (int) ($this->user_last_read_message_id ?? 0)) {
             $this->update(['user_last_read_message_id' => $latestId]);
         }
+    }
+
+    public function adminIsTyping(): bool
+    {
+        return Cache::get($this->adminTypingCacheKey(), false) === true;
+    }
+
+    public function setAdminTyping(bool $typing): void
+    {
+        if ($typing) {
+            Cache::put($this->adminTypingCacheKey(), true, 10);
+
+            return;
+        }
+
+        Cache::forget($this->adminTypingCacheKey());
+    }
+
+    private function adminTypingCacheKey(): string
+    {
+        return 'chat:admin-typing:'.$this->id;
     }
 
     #[Scope]

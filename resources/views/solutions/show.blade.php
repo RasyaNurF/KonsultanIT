@@ -1,6 +1,6 @@
 @extends('layouts.site')
 
-@section('title', $solution->title.' — Nusakode')
+@section('title', $solution->title.' — KIT Konsultan IT')
 @section('meta-description', \Illuminate\Support\Str::limit($solution->excerpt ?? $solution->subtitle ?? $solution->title, 160))
 
 @section('content')
@@ -41,7 +41,7 @@
                         @else
                             <span class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-navy-950 text-white"><svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 13 4 4L19 7"/></svg></span>
                         @endif
-                        <p class="mt-5 text-[13px] font-bold uppercase tracking-[0.18em] text-neutral-400">{{$solution->partner_name?'Produk mitra '.$solution->partner_name:'Layanan terkelola Nusakode'}}</p>
+                        <p class="mt-5 text-[13px] font-bold uppercase tracking-[0.18em] text-neutral-400">{{$solution->partner_name?'Produk mitra '.$solution->partner_name:'Layanan terkelola KIT Konsultan IT'}}</p>
                     </div>
                 </div>
             </div>

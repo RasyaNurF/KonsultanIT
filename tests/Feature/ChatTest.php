@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\ChatMessage;
+use App\Models\ChatParticipant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -23,6 +24,7 @@ class ChatTest extends TestCase
         $response->assertJsonPath('messages.0.sender', 'guest');
         $response->assertJsonPath('messages.1.sender', 'admin');
         $response->assertJsonPath('messages.1.is_auto', true);
+        $response->assertJsonPath('messages.1.body', ChatMessage::WAITING_REPLY_MESSAGE);
 
         $this->assertDatabaseHas('chat_messages', [
             'sender' => 'guest',
@@ -33,6 +35,24 @@ class ChatTest extends TestCase
             'sender' => 'admin',
             'is_auto' => true,
         ]);
+    }
+
+    public function test_follow_up_chat_message_does_not_repeat_the_automatic_reply(): void
+    {
+        $this->postJson(route('kontak.chat'), [
+            'name' => 'Budi Santoso',
+            'body' => 'Pesan pertama.',
+        ])->assertOk();
+
+        $this->postJson(route('kontak.chat'), [
+            'body' => 'Ada informasi tambahan.',
+        ])->assertOk()
+            ->assertJsonCount(1, 'messages')
+            ->assertJsonPath('messages.0.body', 'Ada informasi tambahan.');
+
+        $this->assertDatabaseCount('chat_messages', 3);
+        $this->assertSame(1, ChatMessage::query()->where('is_auto', true)->count());
+        $this->assertSame('unread', ChatParticipant::query()->firstOrFail()->status);
     }
 
     public function test_chat_message_requires_a_body(): void

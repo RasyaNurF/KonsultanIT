@@ -1,13 +1,13 @@
 @extends('layouts.site')
 
-@section('title', 'Lupa Kata Sandi — Nusakode')
-@section('meta-description', 'Minta tautan atur ulang kata sandi akun Nusakode Anda.')
+@section('title', 'Lupa Kata Sandi — KIT Konsultan IT')
+@section('meta-description', 'Minta tautan atur ulang kata sandi akun KIT Konsultan IT Anda.')
 
 @section('content')
 <section class="py-20 sm:py-28">
     <div class="mx-auto max-w-md px-4 sm:px-6">
         <div class="text-center">
-            <a href="{{ url('/') }}" class="text-xl font-extrabold tracking-tight text-navy-900">Nusakode<span class="text-brand-600">.</span></a>
+            <a href="{{ url('/') }}" class="text-xl font-extrabold tracking-tight text-navy-900">KIT Konsultan IT</a>
             <h1 class="mt-6 text-3xl font-extrabold tracking-tight text-balance text-navy-950">Lupa kata sandi?</h1>
             <p class="mt-2 text-[15px] text-neutral-500">Masukkan email akun Anda — kami kirim tautan atur ulang.</p>
         </div>

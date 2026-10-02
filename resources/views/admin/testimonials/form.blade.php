@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', ($testimonial->exists ? 'Ubah Testimonial' : 'Tambah Testimonial').' — Admin Nusakode')
+@section('title', ($testimonial->exists ? 'Ubah Testimonial' : 'Tambah Testimonial').' — Admin KIT Konsultan IT')
 
 @section('content')
 <x-admin.page-header

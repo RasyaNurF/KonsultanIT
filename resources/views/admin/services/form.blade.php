@@ -1,12 +1,12 @@
 @extends('admin.layouts.app')
 
-@section('title', ($service->exists ? 'Ubah Layanan' : 'Tambah Layanan').' — Admin Nusakode')
+@section('title', ($service->exists ? 'Ubah Layanan' : 'Tambah Layanan').' — Admin KIT Konsultan IT')
 
 @section('content')
 <x-admin.page-header
     :title="$service->exists ? 'Ubah Layanan' : 'Tambah Layanan'"
     eyebrow="Konten"
-    :description="$service->exists ? 'Perbarui data layanan '.$service->title.'.' : 'Tambahkan layanan baru NUSAKODE.'">
+    :description="$service->exists ? 'Perbarui data layanan '.$service->title.'.' : 'Tambahkan layanan baru KIT Konsultan IT.'">
     <x-slot:actions>
         <x-admin.partials.button :href="route('admin.services.index')" variant="secondary">Batal</x-admin.partials.button>
     </x-slot:actions>

@@ -30,7 +30,7 @@ class AdminDashboardTest extends TestCase
         $this->actingAs($admin)
             ->get(route('admin.dashboard'))
             ->assertOk()
-            ->assertSee('Berikut ringkasan aktivitas NUSAKODE.', false)
+            ->assertSee('Berikut ringkasan aktivitas KIT Konsultan IT.', false)
             ->assertSee('Total Leads');
     }
 }

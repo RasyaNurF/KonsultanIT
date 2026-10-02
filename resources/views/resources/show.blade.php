@@ -1,6 +1,6 @@
 @extends('layouts.site')
 
-@section('title', $resource->title.' — Nusakode')
+@section('title', $resource->title.' — KIT Konsultan IT')
 @section('meta-description', \Illuminate\Support\Str::limit($resource->excerpt ?? $resource->title, 160))
 
 @section('content')
@@ -8,9 +8,7 @@
         <div class="mx-auto max-w-7xl px-4 sm:px-6">
             <div class="max-w-3xl py-20 sm:py-28">
                 <p class="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-[0.24em] text-navy-950">
-                    <a href="{{route('resources.index')}}" class="transition hover:text-brand-700">Resources</a>
-                    <span class="text-neutral-300" aria-hidden="true">/</span>
-                    <a href="{{route('resources.type',$resource->type->value)}}" class="text-neutral-400 transition hover:text-brand-700">{{$resource->type->label()}}</a>
+                    <a href="{{route('resources.type',$resource->type->value)}}" class="transition hover:text-brand-700">{{$resource->type->label()}}</a>
 
                 </p>
                 <h1 class="mt-6 text-4xl font-extrabold leading-[1.05] tracking-tight text-balance text-navy-950 sm:text-5xl">{{$resource->title}}</h1>

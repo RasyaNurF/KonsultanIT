@@ -1,9 +1,9 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Layanan — Admin Nusakode')
+@section('title', 'Layanan — Admin KIT Konsultan IT')
 
 @section('content')
-<x-admin.page-header title="Layanan" description="Layanan yang ditawarkan NUSAKODE." eyebrow="Konten">
+<x-admin.page-header title="Layanan" description="Layanan yang ditawarkan KIT Konsultan IT." eyebrow="Konten">
     <x-slot:actions>
         <x-admin.partials.button :href="route('admin.services.create')" variant="primary">
             <x-admin.icon name="plus" class="h-4 w-4" /> Tambah Layanan

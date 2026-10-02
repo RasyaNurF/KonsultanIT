@@ -57,7 +57,7 @@ class AnnouncementDisplayTest extends TestCase
             'is_dismissible' => true,
         ]);
 
-        $this->withUnencryptedCookie('nusakode_bar_dismissed', (string) $bar->id)
+        $this->withUnencryptedCookie('kit_bar_dismissed', (string) $bar->id)
             ->get(route('home'))
             ->assertOk()
             ->assertDontSee('Promo yang bisa ditutup.');
@@ -73,7 +73,7 @@ class AnnouncementDisplayTest extends TestCase
             'is_active' => true,
         ]);
 
-        $this->withUnencryptedCookie('nusakode_popup_seen', (string) $popup->id)
+        $this->withUnencryptedCookie('kit_popup_seen', (string) $popup->id)
             ->get(route('home'))
             ->assertOk()
             ->assertSee('data-announcement-popup', false)
@@ -90,7 +90,7 @@ class AnnouncementDisplayTest extends TestCase
             'is_active' => true,
         ]);
 
-        $this->withUnencryptedCookie('nusakode_popup_seen', (string) $popup->id)
+        $this->withUnencryptedCookie('kit_popup_seen', (string) $popup->id)
             ->get(route('home'))
             ->assertOk()
             ->assertDontSee('data-announcement-popup', false);
@@ -110,7 +110,7 @@ class AnnouncementDisplayTest extends TestCase
             ->assertSee('data-cookie-notice', false)
             ->assertSee('Cookie membantu kami memahami kunjungan.');
 
-        $this->withUnencryptedCookie('nusakode_cookie_consent', 'accepted')
+        $this->withUnencryptedCookie('kit_cookie_consent', 'accepted')
             ->get(route('home'))
             ->assertOk()
             ->assertDontSee('data-cookie-notice', false);

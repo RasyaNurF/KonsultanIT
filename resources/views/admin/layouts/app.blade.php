@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>@yield('title', 'Admin — Nusakode')</title>
+    <title>@yield('title', 'Admin — KIT Konsultan IT')</title>
     <meta name="robots" content="noindex, nofollow">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -21,7 +21,7 @@
         aria-label="Navigasi admin">
         <div class="flex h-16 shrink-0 items-center justify-between px-5">
             <a href="{{ route('admin.dashboard') }}" class="flex flex-col leading-none">
-                <span class="text-[17px] font-extrabold tracking-[0.14em] text-white">NUSAKODE</span>
+                <img src="{{ asset('img/logo-company-white-trimmed.png') }}" alt="KIT Konsultan IT" class="h-9 w-44 object-contain object-left">
                 <span class="mt-1 text-[9px] font-semibold uppercase tracking-[0.22em] text-white/40">Admin Panel</span>
             </a>
             <button type="button" data-admin-sidebar-close class="flex h-9 w-9 items-center justify-center rounded-md text-white/60 transition hover:bg-white/10 hover:text-white lg:hidden" aria-label="Tutup menu">
@@ -222,7 +222,7 @@
 
         <footer class="shrink-0 border-t border-neutral-200 px-4 py-5 sm:px-6">
             <div class="flex flex-col gap-1 text-xs text-neutral-400 sm:flex-row sm:items-center sm:justify-between">
-                <p>&copy; {{ date('Y') }} PT Nusakode Teknologi</p>
+                <p>&copy; {{ date('Y') }} KIT Konsultan IT</p>
                 <p>Panel admin · v1.0</p>
             </div>
         </footer>

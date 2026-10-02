@@ -21,9 +21,9 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->encryptCookies(except: [
-            'nusakode_cookie_consent',
-            'nusakode_bar_dismissed',
-            'nusakode_popup_seen',
+            'kit_cookie_consent',
+            'kit_bar_dismissed',
+            'kit_popup_seen',
         ]);
 
         $middleware->append(SecurityHeaders::class);

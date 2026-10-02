@@ -76,7 +76,7 @@ class MessageController extends Controller
                 'sender' => $message->sender,
                 'name' => $message->name,
                 'body' => $message->body,
-                'time' => $message->created_at->format('H:i d M'),
+                'time' => $message->timestampWib('H:i d M'),
             ])->values(),
             'status' => $status->value,
             'status_label' => $status->label(),
@@ -105,8 +105,21 @@ class MessageController extends Controller
         ]);
     }
 
+    public function typing(Request $request, ChatParticipant $participant): JsonResponse
+    {
+        $validated = $request->validate([
+            'typing' => ['required', 'boolean'],
+        ]);
+
+        $participant->setAdminTyping((bool) $validated['typing']);
+
+        return response()->json(['typing' => $participant->adminIsTyping()]);
+    }
+
     public function reply(MessageReplyRequest $request, ChatParticipant $participant): RedirectResponse
     {
+        $participant->setAdminTyping(false);
+
         ChatMessage::create([
             'chat_participant_id' => $participant->id,
             'guest_token' => $participant->guest_token,
@@ -137,6 +150,8 @@ class MessageController extends Controller
 
     public function destroy(ChatParticipant $participant): RedirectResponse
     {
+        $participant->setAdminTyping(false);
+
         $participant->messages()->delete();
         $participant->delete();
 

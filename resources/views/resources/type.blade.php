@@ -5,7 +5,7 @@
         \App\Enums\ResourceType::Event => [
             'eyebrow' => 'Event',
             'title' => 'Event dan webinar mendatang.',
-            'description' => 'Ikuti sesi langsung bersama tim Nusakode dan mitra teknologi untuk membahas tantangan nyata di lapangan.',
+            'description' => 'Ikuti sesi langsung bersama tim KIT Konsultan IT dan mitra teknologi untuk membahas tantangan nyata di lapangan.',
             'accent' => 'text-brand-400',
         ],
         \App\Enums\ResourceType::Whitepaper => [
@@ -22,7 +22,7 @@
         ],
         \App\Enums\ResourceType::News => [
             'eyebrow' => 'News',
-            'title' => 'Kabar terbaru dari Nusakode.',
+            'title' => 'Kabar terbaru dari KIT Konsultan IT.',
             'description' => 'Kemitraan, pencapaian, dan pengumuman terbaru seputar perusahaan dan ekosistem kami.',
             'accent' => 'text-emerald-400',
         ],
@@ -35,13 +35,13 @@
         default => [
             'eyebrow' => 'Resources',
             'title' => $resourceType->label(),
-            'description' => 'Kumpulan resource dari Nusakode.',
+            'description' => 'Kumpulan resource dari KIT Konsultan IT.',
             'accent' => 'text-brand-400',
         ],
     };
 @endphp
 
-@section('title', $meta['eyebrow'].' — Nusakode')
+@section('title', $meta['eyebrow'].' — KIT Konsultan IT')
 @section('meta-description', \Illuminate\Support\Str::limit($meta['description'], 160))
 
 @section('content')
@@ -53,7 +53,6 @@
                 <p class="mt-6 max-w-xl text-base leading-relaxed text-neutral-300">{{$meta['description']}}</p>
                 <div class="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3">
                     <span class="text-sm font-semibold text-neutral-400">{{$resources->total()}} {{$meta['eyebrow']}}</span>
-                    <a href="{{route('resources.index')}}" class="text-[13px] font-bold text-white/70 transition hover:text-white">Lihat semua resources</a>
                 </div>
             </div>
         </div>
@@ -74,7 +73,7 @@
             <div class="mx-auto max-w-3xl px-4 py-20 text-center sm:px-6 sm:py-28">
                 <p class="text-lg font-bold text-navy-950">Belum ada {{$meta['eyebrow']}}.</p>
                 <p class="mt-2 text-sm text-neutral-500">Kembali lagi nanti atau jelajahi kategori lain.</p>
-                <a href="{{route('resources.index')}}" class="mt-8 inline-flex items-center gap-2 rounded-full bg-brand-600 px-8 py-3.5 text-sm font-bold text-white transition hover:bg-brand-500">Semua Resources</a>
+                <a href="{{route('blog.index')}}" class="mt-8 inline-flex items-center gap-2 rounded-full bg-brand-600 px-8 py-3.5 text-sm font-bold text-white transition hover:bg-brand-500">Baca Blog</a>
             </div>
         </section>
     @else

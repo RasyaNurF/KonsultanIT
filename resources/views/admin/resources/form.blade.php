@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', ($resource->exists ? 'Ubah Resource' : 'Tambah Resource').' — Admin Nusakode')
+@section('title', ($resource->exists ? 'Ubah Resource' : 'Tambah Resource').' — Admin KIT Konsultan IT')
 
 @php
     $startsAt = old('starts_at', $resource->starts_at?->format('Y-m-d\TH:i'));
@@ -13,7 +13,7 @@
 <x-admin.page-header
     :title="$resource->exists ? 'Ubah Resource' : 'Tambah Resource'"
     eyebrow="Konten"
-    :description="$resource->exists ? 'Perbarui resource '.$resource->title.'.' : 'Tambahkan resource baru untuk NUSAKODE.'">
+    :description="$resource->exists ? 'Perbarui resource '.$resource->title.'.' : 'Tambahkan resource baru untuk KIT Konsultan IT.'">
     <x-slot:actions>
         <x-admin.partials.button :href="route('admin.resources.index')" variant="secondary">Batal</x-admin.partials.button>
     </x-slot:actions>

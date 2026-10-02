@@ -21,11 +21,11 @@ class CompanyContentSeeder extends Seeder
     public function run(): void
     {
         CompanyProfile::query()->updateOrCreate(
-            ['name' => 'PT Nusakode Teknologi'],
+            ['name' => 'KIT Konsultan IT'],
             [
                 'tagline' => 'Mitra teknologi informasi untuk perusahaan Indonesia.',
                 'description' => 'Perusahaan jasa teknologi informasi di Jakarta. Membangun aplikasi, sistem, dan infrastruktur TI bersama tim Anda sejak 2015.',
-                'about' => 'PT Nusakode Teknologi berdiri di Jakarta pada 2015. Kami melayani perusahaan menengah hingga enterprise — sebagai pelaksana proyek sekaligus mitra pemeliharaan jangka panjang.',
+                'about' => 'KIT Konsultan IT berdiri di Jakarta pada 2015. Kami melayani perusahaan menengah hingga enterprise — sebagai pelaksana proyek sekaligus mitra pemeliharaan jangka panjang.',
                 'vision' => 'Menjadi mitra teknologi paling dipercaya bagi perusahaan Indonesia.',
                 'mission' => "Menyediakan solusi digital yang rapi dan terukur.\nBekerja transparan dengan kontrak tertulis.\nMenyerahkan kode sumber dan pengetahuan sepenuhnya kepada klien.",
                 'values' => [
@@ -62,7 +62,7 @@ class CompanyContentSeeder extends Seeder
                 ['slug' => Str::slug($name)],
                 [
                     'name' => $name,
-                    'description' => 'Artikel '.$name.' dari tim Nusakode.',
+                    'description' => 'Artikel '.$name.' dari tim KIT Konsultan IT.',
                     'sort_order' => $index + 1,
                     'status' => PublishStatus::Published,
                 ],
@@ -78,7 +78,7 @@ class CompanyContentSeeder extends Seeder
         }
 
         $teams = [
-            ['Andi Pratama', 'Chief Technology Officer', 'Memimpin arsitektur sistem dan standar engineering Nusakode sejak 2016.'],
+            ['Andi Pratama', 'Chief Technology Officer', 'Memimpin arsitektur sistem dan standar engineering KIT Konsultan IT sejak 2016.'],
             ['Sinta Maharani', 'Head of Product Design', 'Merancang pengalaman pengguna yang sederhana untuk sistem perusahaan yang kompleks.'],
             ['Rizky Firmansyah', 'Lead Backend Engineer', 'Spesialis Laravel, integrasi API, dan performa basis data skala menengah.'],
             ['Dewi Anggraini', 'Project Manager', 'Menjaga lingkup, jadwal, dan komunikasi proyek tetap transparan.'],

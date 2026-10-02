@@ -1,6 +1,6 @@
 @extends('layouts.site')
 
-@section('title', $category->name.' — Nusakode')
+@section('title', $category->name.' — KIT Konsultan IT')
 @section('meta-description', \Illuminate\Support\Str::limit($category->description ?? $category->tagline ?? $category->name, 160))
 
 @section('content')

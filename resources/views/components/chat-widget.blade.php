@@ -16,10 +16,10 @@
                     </svg>
                 </span>
                 <span>
-                    <span class="block text-sm font-bold">Tim Nusakode</span>
+                    <span class="block text-sm font-bold">Tim KIT Konsultan IT</span>
                     <span class="mt-0.5 flex items-center gap-1.5 text-[11px] text-white/60">
-                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden="true"></span>
-                        Biasanya membalas cepat
+                        <span class="h-1.5 w-1.5 rounded-full bg-white/50" aria-hidden="true"></span>
+                        Kami membalas pada jam kerja
                     </span>
                 </span>
             </div>
@@ -31,6 +31,13 @@
 
         <div data-chat-messages role="log" aria-live="polite" class="flex max-h-[min(380px,50dvh)] min-h-[200px] flex-col gap-3 overflow-y-auto bg-neutral-50 p-4">
             <p data-chat-empty class="m-auto px-6 text-center text-[13px] text-neutral-500">Memuat percakapan…</p>
+            <div data-chat-typing hidden role="status" aria-label="Admin sedang mengetik" class="flex justify-start">
+                <span class="flex items-center gap-1.5 rounded-2xl rounded-bl-sm bg-white px-4 py-3 ring-1 ring-neutral-200" aria-hidden="true">
+                    <span class="chat-typing-dot h-1.5 w-1.5 rounded-full bg-neutral-500"></span>
+                    <span class="chat-typing-dot h-1.5 w-1.5 rounded-full bg-neutral-500"></span>
+                    <span class="chat-typing-dot h-1.5 w-1.5 rounded-full bg-neutral-500"></span>
+                </span>
+            </div>
         </div>
 
         <form data-chat-form method="post" action="{{ route('pesan.store') }}" class="border-t border-neutral-200 bg-white p-4">

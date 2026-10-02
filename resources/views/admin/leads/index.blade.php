@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Leads — Admin Nusakode')
+@section('title', 'Leads — Admin KIT Konsultan IT')
 
 @section('content')
 <x-admin.page-header title="Leads" description="Permintaan proyek yang masuk melalui formulir kontak." eyebrow="CRM">

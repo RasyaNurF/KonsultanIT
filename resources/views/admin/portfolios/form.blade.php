@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', ($portfolio->exists ? 'Ubah Portfolio' : 'Tambah Portfolio').' — Admin Nusakode')
+@section('title', ($portfolio->exists ? 'Ubah Portfolio' : 'Tambah Portfolio').' — Admin KIT Konsultan IT')
 
 @section('content')
 <x-admin.page-header

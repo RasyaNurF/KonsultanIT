@@ -20,6 +20,7 @@ class AdminMessagesLiveTest extends TestCase
         $this->getJson(route('admin.messages.unread'))->assertUnauthorized();
         $this->getJson(route('admin.messages.live'))->assertUnauthorized();
         $this->getJson(route('admin.messages.poll', $participant))->assertUnauthorized();
+        $this->postJson(route('admin.messages.typing', $participant), ['typing' => true])->assertUnauthorized();
     }
 
     public function test_editors_cannot_access_the_live_endpoints(): void
@@ -32,6 +33,10 @@ class AdminMessagesLiveTest extends TestCase
 
         $this->actingAs(User::factory()->editor()->create())
             ->getJson(route('admin.messages.poll', $participant))
+            ->assertForbidden();
+
+        $this->actingAs(User::factory()->editor()->create())
+            ->postJson(route('admin.messages.typing', $participant), ['typing' => true])
             ->assertForbidden();
     }
 
@@ -94,6 +99,42 @@ class AdminMessagesLiveTest extends TestCase
             ->assertOk()
             ->assertJsonCount(1, 'messages')
             ->assertJsonPath('messages.0.body', 'Pesan lanjutan.');
+    }
+
+    public function test_admin_thread_and_poll_show_indonesian_wib_timestamp(): void
+    {
+        $participant = $this->conversation();
+        $participant->messages()->firstOrFail()
+            ->forceFill(['created_at' => '2026-10-03 17:30:00'])
+            ->save();
+
+        $admin = User::factory()->create();
+
+        $this->actingAs($admin)
+            ->getJson(route('admin.messages.poll', $participant))
+            ->assertOk()
+            ->assertJsonPath('messages.0.time', '00:30 04 Okt WIB');
+
+        $this->actingAs($admin)
+            ->get(route('admin.messages.show', $participant))
+            ->assertOk()
+            ->assertSee('00:30 04 Okt WIB');
+    }
+
+    public function test_admin_reply_clears_typing_status(): void
+    {
+        $participant = $this->conversation();
+        $admin = User::factory()->create();
+
+        $this->actingAs($admin)
+            ->postJson(route('admin.messages.typing', $participant), ['typing' => true])
+            ->assertJsonPath('typing', true);
+
+        $this->actingAs($admin)
+            ->post(route('admin.messages.reply', $participant), ['body' => 'Terima kasih, kami bantu cek.'])
+            ->assertRedirect(route('admin.messages.show', $participant));
+
+        $this->assertFalse($participant->adminIsTyping());
     }
 
     private function conversation(): ChatParticipant

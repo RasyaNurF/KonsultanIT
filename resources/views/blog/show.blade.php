@@ -1,6 +1,6 @@
 @extends('layouts.site')
 
-@section('title', $article->seo_title ?: $article->title.' — Nusakode')
+@section('title', $article->seo_title ?: $article->title.' — KIT Konsultan IT')
 @section('meta-description', $article->meta_description ?: \Illuminate\Support\Str::limit(strip_tags($article->excerpt ?? $article->body ?? $article->title), 160))
 @if ($article->featured_image_path)
     @section('og-image', str_starts_with($article->featured_image_path, 'img/') ? asset($article->featured_image_path) : \Illuminate\Support\Facades\Storage::disk('public')->url($article->featured_image_path))
@@ -40,6 +40,11 @@
                                         @endif
                                     </span>
                                 </span>
+                            @else
+                                <span class="flex items-center gap-3">
+                                    <span class="flex h-11 w-11 items-center justify-center rounded-full bg-navy-950 text-sm font-bold text-white" aria-hidden="true">K</span>
+                                    <span class="text-sm font-bold text-navy-950">Tim Redaksi KIT</span>
+                                </span>
                             @endif
                             <span class="text-[13px] text-neutral-500">{{ ($article->published_at ?? $article->created_at)?->translatedFormat('d F Y') }}</span>
                             <span class="text-[13px] text-neutral-500" aria-hidden="true">·</span>
@@ -59,17 +64,12 @@
             </div>
         </div>
 
-        @if ($img)
-            <div class="mx-auto max-w-6xl px-4 sm:px-6">
-                <img src="{{ $img }}" alt="{{ $article->title }}" class="aspect-[16/8] w-full rounded-2xl object-cover" loading="lazy">
-            </div>
-        @endif
-
-        <div class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+        <div class="mx-auto max-w-6xl px-4 pb-14 sm:px-6">
             <div class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
                 <div class="min-w-0">
+                    <img src="{{ $img ?: asset('img/editorial/insight-team.png') }}" alt="{{ $article->title }}" class="aspect-[16/9] w-full rounded-xl object-cover" fetchpriority="high">
                     @if ($article->excerpt)
-                        <p class="border-l-2 border-brand-600 pl-5 text-lg font-medium leading-relaxed text-navy-950">{{ $article->excerpt }}</p>
+                        <p class="mt-10 text-xl font-medium leading-8 text-navy-950">{{ $article->excerpt }}</p>
                     @endif
 
                     @if ($keyPoints)
@@ -91,12 +91,12 @@
                             @foreach ($sections as $section)
                                 <section id="{{ $section['id'] }}" aria-label="{{ $section['heading'] }}" class="scroll-mt-28">
                                     <h2 class="text-2xl font-extrabold tracking-tight text-navy-950">{{ $section['heading'] }}</h2>
-                                    <div class="mt-4 whitespace-pre-line text-[15px] leading-relaxed text-neutral-600">{{ $section['body'] }}</div>
+                                    <div class="mt-4 whitespace-pre-line text-[16px] leading-8 text-neutral-700">{{ $section['body'] }}</div>
                                 </section>
                             @endforeach
                         </div>
                     @else
-                        <div class="mt-8 whitespace-pre-line text-[15px] leading-relaxed text-neutral-600">{{ $article->body ?: 'Isi artikel segera hadir.' }}</div>
+                        <div class="mt-8 whitespace-pre-line text-[16px] leading-8 text-neutral-700">{{ $article->body ?: 'Isi artikel segera hadir.' }}</div>
                     @endif
 
                     @if ($article->tagList())
@@ -107,14 +107,11 @@
                         </ul>
                     @endif
 
-                    <section class="mt-12 rounded-2xl bg-navy-950 p-8 text-white sm:p-10">
-                        <p class="text-xs font-bold uppercase tracking-[0.2em] text-brand-400">Konsultasi Gratis</p>
-                        <h2 class="mt-3 max-w-xl text-2xl font-extrabold tracking-tight text-balance sm:text-3xl">Konsultasikan kebutuhan {{ $article->categoryName() }} perusahaan Anda</h2>
-                        <p class="mt-3 max-w-xl text-[15px] leading-relaxed text-neutral-300">Ceritakan kebutuhan Anda, tim Nusakode akan membantu memetakan solusi yang paling sesuai.</p>
-                        <div class="mt-6 flex flex-wrap gap-3">
-                            <a href="{{ route('kontak') }}" class="inline-flex items-center gap-2 rounded-full bg-brand-600 px-7 py-3 text-sm font-bold text-white transition hover:bg-brand-500">Hubungi Kami</a>
-                            <a href="{{ route('layanan.index') }}" class="inline-flex items-center gap-2 rounded-full border border-white/25 px-7 py-3 text-sm font-bold text-white transition hover:border-white hover:bg-white/10">Mulai Konsultasi</a>
-                        </div>
+                    <section class="mt-12 rounded-xl bg-[#f2f6fa] p-8 sm:p-10">
+                        <p class="text-xs font-bold uppercase tracking-[0.18em] text-brand-700">Mari berdiskusi</p>
+                        <h2 class="mt-3 max-w-xl text-2xl font-extrabold tracking-tight text-navy-950 sm:text-3xl">Punya tantangan digital yang serupa?</h2>
+                        <p class="mt-3 max-w-xl text-[15px] leading-7 text-neutral-600">Ceritakan kebutuhan bisnis Anda. Tim KIT Konsultan IT siap membantu memetakan langkah berikutnya.</p>
+                        <a href="{{ route('kontak') }}" class="mt-6 inline-flex rounded-full bg-navy-950 px-7 py-3 text-sm font-bold text-white transition hover:bg-brand-700">Hubungi Kami →</a>
                     </section>
 
                     @if ($author)
@@ -142,10 +139,10 @@
                     </div>
                 </div>
 
-                <aside class="space-y-6 lg:sticky lg:top-28">
+                <aside class="space-y-8 border-t border-neutral-200 pt-8 lg:sticky lg:top-28 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
                     @if (count($sections) > 1)
-                        <nav class="rounded-2xl border border-neutral-200 bg-white p-6" aria-label="Daftar isi">
-                            <h2 class="text-sm font-bold uppercase tracking-[0.18em] text-navy-950">Table of Contents</h2>
+                        <nav aria-label="Daftar isi">
+                            <h2 class="text-sm font-bold uppercase tracking-[0.18em] text-navy-950">Dalam artikel ini</h2>
                             <ol class="mt-4 space-y-3">
                                 @foreach ($sections as $section)
                                     <li>
@@ -156,13 +153,16 @@
                         </nav>
                     @endif
 
-                    <div class="overflow-hidden rounded-2xl bg-navy-950 text-white">
-                        <div class="p-6">
-                            <p class="text-xs font-bold uppercase tracking-[0.18em] text-brand-400">Butuh solusi serupa?</p>
-                            <p class="mt-3 text-lg font-extrabold leading-snug">Diskusikan kebutuhan {{ $article->categoryName() }} Anda dengan tim kami.</p>
-                            <a href="{{ route('kontak') }}" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-600 px-6 py-3 text-sm font-bold text-white transition hover:bg-brand-500">Konsultasi Sekarang</a>
+                    @if ($related->isNotEmpty())
+                        <div class="border-t border-neutral-200 pt-7">
+                            <h2 class="text-sm font-bold uppercase tracking-[0.18em] text-navy-950">Artikel lainnya</h2>
+                            <div class="mt-4 space-y-4">
+                                @foreach ($related as $item)
+                                    <a href="{{ route('blog.show', $item->slug) }}" class="block border-b border-neutral-200 pb-4 text-sm font-semibold leading-6 text-navy-950 hover:text-brand-700">{{ $item->title }}</a>
+                                @endforeach
+                            </div>
                         </div>
-                    </div>
+                    @endif
                 </aside>
             </div>
         </div>

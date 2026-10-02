@@ -1,6 +1,6 @@
 @extends('layouts.site')
 
-@section('title', 'Halaman tidak ditemukan — Nusakode')
+@section('title', 'Halaman tidak ditemukan — KIT Konsultan IT')
 @section('meta-description', 'Halaman yang Anda cari tidak ditemukan.')
 
 @section('content')

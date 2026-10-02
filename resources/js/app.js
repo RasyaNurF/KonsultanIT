@@ -4,6 +4,144 @@ import './admin';
 
 const drawer = document.querySelector('[data-drawer]');
 const toggle = document.querySelector('[data-toggle]');
+const solutionTrigger = document.querySelector('[data-solution-trigger]');
+const solutionMenu = document.querySelector('[data-solution-menu]');
+const resourceTrigger = document.querySelector('[data-resource-trigger]');
+const resourceMenu = document.querySelector('[data-resource-menu]');
+
+if (solutionTrigger && solutionMenu) {
+    const needTabs = [...solutionMenu.querySelectorAll('[data-explorer-need]')];
+    const needPanels = [...solutionMenu.querySelectorAll('[data-explorer-panel]')];
+    const chevron = solutionTrigger.querySelector('[data-solution-chevron]');
+    let closeTimer;
+
+    const setMenuOpen = (open) => {
+        clearTimeout(closeTimer);
+        solutionMenu.dataset.open = String(open);
+        solutionTrigger.setAttribute('aria-expanded', String(open));
+        chevron?.classList.toggle('rotate-180', open);
+    };
+
+    const activateNeed = (tab, focus = false) => {
+        const activeIndex = tab.dataset.explorerNeed;
+
+        needTabs.forEach((item) => {
+            const active = item === tab;
+            item.setAttribute('aria-selected', String(active));
+            item.tabIndex = active ? 0 : -1;
+        });
+
+        needPanels.forEach((panel) => {
+            panel.hidden = panel.dataset.explorerPanel !== activeIndex;
+        });
+
+        if (focus) tab.focus();
+    };
+
+    solutionTrigger.addEventListener('pointerenter', () => setMenuOpen(true));
+    solutionTrigger.addEventListener('pointerleave', () => {
+        closeTimer = setTimeout(() => setMenuOpen(false), 150);
+    });
+    solutionTrigger.addEventListener('click', () => {
+        setMenuOpen(true);
+        needTabs[0]?.focus();
+    });
+    solutionTrigger.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowDown') {
+            event.preventDefault();
+            setMenuOpen(true);
+            needTabs[0]?.focus();
+        }
+    });
+
+    solutionMenu.addEventListener('pointerenter', () => clearTimeout(closeTimer));
+    solutionMenu.addEventListener('pointerleave', () => setMenuOpen(false));
+
+    needTabs.forEach((tab, index) => {
+        tab.addEventListener('pointerenter', () => activateNeed(tab));
+        tab.addEventListener('focus', () => activateNeed(tab));
+        tab.addEventListener('click', () => activateNeed(tab));
+        tab.addEventListener('keydown', (event) => {
+            let nextIndex;
+
+            if (event.key === 'ArrowDown') nextIndex = (index + 1) % needTabs.length;
+            else if (event.key === 'ArrowUp') nextIndex = (index - 1 + needTabs.length) % needTabs.length;
+            else if (event.key === 'Home') nextIndex = 0;
+            else if (event.key === 'End') nextIndex = needTabs.length - 1;
+            else return;
+
+            event.preventDefault();
+            activateNeed(needTabs[nextIndex], true);
+        });
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && solutionMenu.dataset.open === 'true') {
+            setMenuOpen(false);
+            solutionTrigger.focus();
+        }
+    });
+
+    document.addEventListener('pointerdown', (event) => {
+        if (!solutionTrigger.contains(event.target) && !solutionMenu.contains(event.target)) setMenuOpen(false);
+    });
+
+    document.addEventListener('focusin', (event) => {
+        if (!solutionTrigger.contains(event.target) && !solutionMenu.contains(event.target)) setMenuOpen(false);
+    });
+}
+
+if (resourceTrigger && resourceMenu) {
+    const chevron = resourceTrigger.querySelector('[data-resource-chevron]');
+    let closeTimer;
+
+    const setMenuOpen = (open) => {
+        clearTimeout(closeTimer);
+        resourceMenu.dataset.open = String(open);
+        resourceTrigger.setAttribute('aria-expanded', String(open));
+        chevron?.classList.toggle('rotate-180', open);
+    };
+
+    resourceTrigger.addEventListener('pointerenter', (event) => {
+        if (event.pointerType !== 'touch') setMenuOpen(true);
+    });
+    resourceTrigger.addEventListener('pointerleave', (event) => {
+        if (event.pointerType !== 'touch') closeTimer = setTimeout(() => setMenuOpen(false), 150);
+    });
+    resourceTrigger.addEventListener('click', () => {
+        setMenuOpen(resourceMenu.dataset.open !== 'true');
+    });
+
+    resourceTrigger.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowDown') {
+            event.preventDefault();
+            setMenuOpen(true);
+            resourceMenu.querySelector('a')?.focus();
+        }
+    });
+
+    resourceMenu.addEventListener('pointerenter', (event) => {
+        if (event.pointerType !== 'touch') clearTimeout(closeTimer);
+    });
+    resourceMenu.addEventListener('pointerleave', (event) => {
+        if (event.pointerType !== 'touch') setMenuOpen(false);
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && resourceMenu.dataset.open === 'true') {
+            setMenuOpen(false);
+            resourceTrigger.focus();
+        }
+    });
+
+    document.addEventListener('pointerdown', (event) => {
+        if (!resourceTrigger.contains(event.target) && !resourceMenu.contains(event.target)) setMenuOpen(false);
+    });
+
+    document.addEventListener('focusin', (event) => {
+        if (!resourceTrigger.contains(event.target) && !resourceMenu.contains(event.target)) setMenuOpen(false);
+    });
+}
 
 if (toggle && drawer) {
     toggle.addEventListener('click', () => {
@@ -19,16 +157,19 @@ if (toggle && drawer) {
     });
 }
 
-// Navbar kaca: transparan di atas lalu berkaca gelap setelah menggulir (hanya
+// Navbar kaca: transparan di atas lalu berkaca terang setelah menggulir (hanya
 // beranda; halaman lain selalu berkaca dari server dan tidak diubah di sini).
 const glassHeader = document.getElementById('glass-header');
 
 if (glassHeader && glassHeader.hasAttribute('data-transparent-top')) {
-    const glassClasses = ['bg-navy-950/80', 'backdrop-blur', 'shadow-sm', 'border-b', 'border-white/10'];
+    const glassClasses = ['bg-white/95', 'backdrop-blur', 'shadow-sm', 'border-b', 'border-neutral-200'];
 
     const onGlassScroll = () => {
         const scrolled = window.scrollY > 24;
         glassClasses.forEach((cls) => glassHeader.classList.toggle(cls, scrolled));
+        glassHeader.classList.toggle('bg-transparent', !scrolled);
+        glassHeader.classList.toggle('shadow-none', !scrolled);
+        glassHeader.classList.toggle('border-transparent', !scrolled);
     };
 
     window.addEventListener('scroll', onGlassScroll, { passive: true });
@@ -43,6 +184,7 @@ if (chatWidget) {
     const chatToggles = document.querySelectorAll('[data-chat-toggle]');
     const chatClose = chatWidget.querySelector('[data-chat-close]');
     const chatMessages = chatWidget.querySelector('[data-chat-messages]');
+    const chatTyping = chatWidget.querySelector('[data-chat-typing]');
     const chatForm = chatWidget.querySelector('[data-chat-form]');
     const chatBody = chatWidget.querySelector('[data-chat-body]');
     const chatError = chatWidget.querySelector('[data-chat-error]');
@@ -52,7 +194,7 @@ if (chatWidget) {
     const messagesUrl = chatWidget.getAttribute('data-messages-url');
     const storeUrl = chatWidget.getAttribute('data-store-url');
 
-    const pollInterval = 5000;
+    const pollInterval = 2000;
     let lastMessageId = 0;
     let pollTimer = null;
     let isOpen = false;
@@ -82,7 +224,7 @@ if (chatWidget) {
         if (!isOwn) {
             const label = document.createElement('p');
             label.className = 'text-[11px] font-bold text-navy-700';
-            label.textContent = message.is_auto ? 'Admin Nusakode (otomatis)' : (message.name || 'Tim Nusakode');
+            label.textContent = message.is_auto ? 'KIT Konsultan IT · pesan otomatis' : (message.name || 'Tim KIT Konsultan IT');
             bubble.appendChild(label);
         }
 
@@ -101,7 +243,7 @@ if (chatWidget) {
         bubble.appendChild(time);
 
         row.appendChild(bubble);
-        chatMessages.appendChild(row);
+        chatMessages.insertBefore(row, chatTyping);
     };
 
     const renderMessages = (messages) => {
@@ -143,6 +285,10 @@ if (chatWidget) {
 
         const data = await response.json();
         renderMessages(data.messages ?? []);
+        if (chatTyping) {
+            chatTyping.hidden = data.admin_typing !== true;
+            if (!chatTyping.hidden) scrollToBottom();
+        }
         showEmptyState();
         hideBadge();
     };
@@ -179,6 +325,7 @@ if (chatWidget) {
     const closeChat = () => {
         isOpen = false;
         chatPanel.hidden = true;
+        if (chatTyping) chatTyping.hidden = true;
         chatToggles.forEach((el) => el.setAttribute('aria-expanded', 'false'));
         stopPolling();
     };
@@ -231,9 +378,7 @@ if (chatWidget) {
 
             const data = await response.json();
 
-            if (data.message) {
-                renderMessages([data.message]);
-            }
+            renderMessages([data.message, data.auto_reply].filter(Boolean));
 
             chatBody.value = '';
         } catch (error) {
@@ -373,7 +518,7 @@ const cookieNotice = document.querySelector('[data-cookie-notice]');
 if (cookieNotice) {
     cookieNotice.querySelectorAll('[data-cookie-consent]').forEach((button) => {
         button.addEventListener('click', () => {
-            setCookie('nusakode_cookie_consent', button.getAttribute('data-cookie-consent'), 60 * 60 * 24 * 365);
+            setCookie('kit_cookie_consent', button.getAttribute('data-cookie-consent'), 60 * 60 * 24 * 365);
             cookieNotice.remove();
         });
     });
@@ -400,52 +545,6 @@ if (solusiTabs.length > 0) {
             solusiPanels.forEach((panel) => {
                 panel.hidden = panel.getAttribute('data-solusi-panel') !== index;
             });
-        });
-    });
-}
-
-// --- Tab kategori solusi pada dropdown navbar ---
-const navSolutionTabs = document.querySelectorAll('[data-nav-solusi-tab]');
-const navSolutionPanels = document.querySelectorAll('[data-nav-solusi-panel]');
-
-if (navSolutionTabs.length > 0) {
-    const activateNavSolutionTab = (tab, focus = false) => {
-        const index = tab.getAttribute('data-nav-solusi-tab');
-
-        navSolutionTabs.forEach((other) => {
-            const active = other === tab;
-            other.setAttribute('aria-selected', String(active));
-            other.tabIndex = active ? 0 : -1;
-        });
-
-        navSolutionPanels.forEach((panel) => {
-            panel.hidden = panel.getAttribute('data-nav-solusi-panel') !== index;
-        });
-
-        if (focus) {
-            tab.focus();
-        }
-    };
-
-    navSolutionTabs.forEach((tab, index) => {
-        tab.addEventListener('click', () => activateNavSolutionTab(tab));
-        tab.addEventListener('keydown', (event) => {
-            let nextIndex;
-
-            if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
-                nextIndex = (index + 1) % navSolutionTabs.length;
-            } else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
-                nextIndex = (index - 1 + navSolutionTabs.length) % navSolutionTabs.length;
-            } else if (event.key === 'Home') {
-                nextIndex = 0;
-            } else if (event.key === 'End') {
-                nextIndex = navSolutionTabs.length - 1;
-            } else {
-                return;
-            }
-
-            event.preventDefault();
-            activateNavSolutionTab(navSolutionTabs[nextIndex], true);
         });
     });
 }

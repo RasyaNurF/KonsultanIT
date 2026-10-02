@@ -38,7 +38,6 @@ use App\Http\Controllers\Public\CareerController as PublicCareerController;
 use App\Http\Controllers\Public\PortfolioController as PublicPortfolioController;
 use App\Http\Controllers\Public\ResourceController as PublicResourceController;
 use App\Http\Controllers\Public\ServiceController as PublicServiceController;
-use App\Http\Controllers\Public\SolutionController as PublicSolutionController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SitemapController;
 use App\Models\Resource;
@@ -49,12 +48,11 @@ Route::get('/', function () {
 })->middleware('maintenance')->name('home');
 
 Route::get('/tentang', AboutController::class)->middleware('maintenance')->name('tentang');
-Route::get('/layanan', [PublicServiceController::class, 'index'])->middleware('maintenance')->name('layanan.index');
-Route::get('/layanan/{service:slug}', [PublicServiceController::class, 'show'])->middleware('maintenance')->name('layanan.show');
-Route::get('/solusi', [PublicSolutionController::class, 'index'])->middleware('maintenance')->name('solusi.index');
-Route::get('/solusi/{category:slug}', [PublicSolutionController::class, 'category'])->middleware('maintenance')->name('solusi.category');
-Route::get('/solusi/{category:slug}/{solution:slug}', [PublicSolutionController::class, 'show'])->middleware('maintenance')->name('solusi.show');
-Route::get('/resources', [PublicResourceController::class, 'index'])->middleware('maintenance')->name('resources.index');
+Route::redirect('/layanan', '/solusi', 301);
+Route::get('/layanan/{slug}', fn (string $slug) => redirect('/solusi/'.$slug, 301))->middleware('maintenance');
+Route::get('/solusi', [PublicServiceController::class, 'index'])->middleware('maintenance')->name('solusi.index');
+Route::get('/solusi/{service:slug}', [PublicServiceController::class, 'show'])->middleware('maintenance')->name('solusi.show');
+Route::get('/solusi/kategori/{path}', fn () => redirect('/solusi', 301))->middleware('maintenance')->where('path', '.*');
 Route::get('/resources/{type}', [PublicResourceController::class, 'type'])->middleware('maintenance')->name('resources.type');
 Route::get('/resources/{type}/{resource:slug}', [PublicResourceController::class, 'show'])->middleware('maintenance')->name('resources.show');
 
@@ -138,6 +136,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin.ability:dashb
         Route::get('pesan/{participant}/poll', [MessageController::class, 'poll'])->name('messages.poll')->middleware('throttle:60,1');
 
         Route::middleware('admin.ability:message.manage')->group(function () {
+            Route::post('pesan/{participant}/typing', [MessageController::class, 'typing'])->name('messages.typing')->middleware('throttle:60,1');
             Route::post('pesan/{participant}/balas', [MessageController::class, 'reply'])->name('messages.reply');
             Route::put('pesan/{participant}', [MessageController::class, 'update'])->name('messages.update');
             Route::delete('pesan/{participant}', [MessageController::class, 'destroy'])->name('messages.destroy');

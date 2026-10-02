@@ -60,10 +60,9 @@ $quotes = $dbQuotes ?: $quotes;
     {{-- ============ HERO ============ --}}
     <section id="beranda-hero" class="relative overflow-hidden bg-navy-950 text-white">
         <img src="{{ $cmsHero['image'] ?? $heroImage }}" alt="" aria-hidden="true" class="absolute inset-0 h-full w-full object-cover" loading="eager" fetchpriority="high">
-        <div class="absolute inset-0 bg-navy-950/70" aria-hidden="true" data-no-reveal></div>
         <div class="relative mx-auto max-w-7xl px-4 pb-20 pt-60 sm:px-6 sm:pb-28 sm:pt-72">
             <div class="max-w-2xl">
-                <p class="flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.28em] text-neutral-300"><span class="h-0.5 w-10 bg-brand-500" aria-hidden="true"></span>Teknologi &amp; Solusi Digital</p>
+                <p class="flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.28em] text-neutral-200"><span class="h-0.5 w-10 bg-brand-500" aria-hidden="true"></span>Teknologi &amp; Solusi Digital</p>
                 @if (! empty($cmsHero))
                     <h1 class="mt-6 text-4xl font-extrabold leading-[1.05] tracking-tight text-balance sm:text-6xl">
                         {{ \Illuminate\Support\Str::replaceLast(' '.$cmsHero['highlight'], '', $cmsHero['title']) }}
@@ -128,8 +127,8 @@ $quotes = $dbQuotes ?: $quotes;
                     <p class="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.22em] text-neutral-400"><span class="h-px w-8 bg-neutral-300" aria-hidden="true"></span>Solusi</p>
                     <h2 class="mt-4 text-3xl font-extrabold tracking-tight text-balance text-navy-950 sm:text-4xl">Pilih solusi sesuai kebutuhan Anda.</h2>
                 </div>
-                <a href="{{ route('layanan.index') }}" class="group inline-flex items-center gap-2 text-sm font-bold text-navy-800">
-                    Lihat semua layanan
+                <a href="{{ route('solusi.index') }}" class="group inline-flex items-center gap-2 text-sm font-bold text-navy-800">
+                    Lihat semua solusi
                     <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                 </a>
             </div>
@@ -170,7 +169,7 @@ $quotes = $dbQuotes ?: $quotes;
                                 <p class="mt-4 text-[13px] font-medium text-neutral-400">{{ implode(' · ', $s['tags']) }}</p>
                             @endif
                             <div class="mt-8 flex flex-wrap gap-3">
-                                <a href="{{ $s['url'] ?? route('layanan.index') }}" class="group inline-flex items-center gap-2 rounded-full bg-navy-950 px-7 py-3 text-sm font-bold text-white transition hover:bg-navy-800">
+                                <a href="{{ $s['url'] ?? route('solusi.index') }}" class="group inline-flex items-center gap-2 rounded-full bg-navy-950 px-7 py-3 text-sm font-bold text-white transition hover:bg-navy-800">
                                     Pelajari Selengkapnya
                                     <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                                 </a>
@@ -227,7 +226,7 @@ $quotes = $dbQuotes ?: $quotes;
                 <p class="text-xs font-bold uppercase tracking-[0.22em] text-brand-700">Tentang kami</p>
                 <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-balance text-navy-950 sm:text-4xl">Bekerja seperti divisi internal Anda</h2>
                 <p class="mt-5 leading-relaxed text-neutral-500">
-                    PT Nusakode Teknologi berdiri di Jakarta pada 2015. Kami melayani perusahaan menengah hingga enterprise — sebagai pelaksana proyek sekaligus mitra pemeliharaan jangka panjang.
+                    KIT Konsultan IT berdiri di Jakarta pada 2015. Kami melayani perusahaan menengah hingga enterprise — sebagai pelaksana proyek sekaligus mitra pemeliharaan jangka panjang.
                 </p>
                 <ul class="mt-8 space-y-4">
                     @foreach (['Kontrak kerja tertulis: lingkup, jadwal, biaya, dan garansi tercantum jelas.', 'Tim tetap, bukan lepas: engineer yang mengerjakan proyek Anda adalah karyawan kami.', 'Serah terima penuh: kode sumber, dokumentasi, kredensial, dan pelatihan operator.'] as $point)
@@ -242,7 +241,7 @@ $quotes = $dbQuotes ?: $quotes;
                     <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                 </a>
             </div>
-            <img src="{{ $aboutImage }}" alt="Rapat perencanaan proyek di kantor Nusakode" class="h-80 w-full object-cover sm:h-[460px]" loading="lazy">
+            <img src="{{ $aboutImage }}" alt="Rapat perencanaan proyek di kantor KIT Konsultan IT" class="h-80 w-full object-cover sm:h-[460px]" loading="lazy">
         </div>
     </section>
 
@@ -312,15 +311,15 @@ $quotes = $dbQuotes ?: $quotes;
     </section>
 
     {{-- ============ CTA KONTAK ============ --}}
-    <section class="bg-navy-900 py-16 text-white">
+    <section class="border-t border-neutral-200 bg-white py-16 text-navy-950">
         <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-6 px-4 sm:px-6">
             <div class="max-w-xl">
                 <h2 class="text-2xl font-extrabold tracking-tight text-balance sm:text-3xl">Punya kebutuhan teknologi untuk dibahas?</h2>
-                <p class="mt-2 text-[15px] text-neutral-300">Ceritakan lewat halaman kontak — kami balas dengan penawaran tertulis.</p>
+                <p class="mt-2 text-[15px] text-neutral-600">Ceritakan lewat halaman kontak — kami balas dengan penawaran tertulis.</p>
             </div>
             <div class="flex flex-wrap gap-3">
                 <a href="{{ route('kontak') }}" class="rounded-full bg-brand-600 px-8 py-3.5 text-sm font-bold text-white transition hover:bg-brand-500">Hubungi Kami</a>
-                <a href="tel:+622150001234" class="rounded-full border border-white/30 px-8 py-3.5 text-sm font-bold transition hover:border-white hover:bg-white/10">+62 21 5000 1234</a>
+                <a href="tel:+622150001234" class="rounded-full border border-neutral-300 px-8 py-3.5 text-sm font-bold transition hover:border-brand-600 hover:text-brand-700">+62 21 5000 1234</a>
             </div>
         </div>
     </section>

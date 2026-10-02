@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', $portfolio->title.' — Admin Nusakode')
+@section('title', $portfolio->title.' — Admin KIT Konsultan IT')
 
 @section('content')
 <x-admin.page-header

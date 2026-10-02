@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ChatMessage extends Model
 {
+    public const WAITING_REPLY_MESSAGE = 'Terima kasih telah menghubungi KIT Konsultan IT. Pesan Anda sudah kami terima. Mohon menunggu balasan dari tim kami melalui percakapan ini pada jam kerja.';
+
     protected $fillable = [
         'chat_participant_id',
         'guest_token',
@@ -34,5 +36,10 @@ class ChatMessage extends Model
     public function isGuest(): bool
     {
         return $this->sender === 'guest';
+    }
+
+    public function timestampWib(string $format = 'H:i'): string
+    {
+        return $this->created_at->copy()->timezone('Asia/Jakarta')->locale('id')->translatedFormat($format).' WIB';
     }
 }

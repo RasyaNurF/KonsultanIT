@@ -27,7 +27,7 @@ class AnnouncementSeeder extends Seeder
         Announcement::query()->firstOrCreate(
             ['placement' => AnnouncementPlacement::Popup->value],
             [
-                'title' => 'Selamat datang di Nusakode',
+                'title' => 'Selamat datang di KIT Konsultan IT',
                 'message' => 'Kami siap membantu kebutuhan digital perusahaan Anda, mulai dari konsultasi awal tanpa biaya.',
                 'link_label' => 'Mulai konsultasi',
                 'link_url' => '/kontak',

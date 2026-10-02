@@ -223,9 +223,9 @@ class AdminCrudMatrixTest extends TestCase
         $admin = User::factory()->superAdmin()->create();
         $this->actingAs($admin);
 
-        $this->put(route('admin.settings.update'), ['company_name' => 'PT Uji Nusakode'])
+        $this->put(route('admin.settings.update'), ['company_name' => 'PT Uji KIT Konsultan IT'])
             ->assertRedirect();
-        $this->assertSame('PT Uji Nusakode', SiteSetting::value('company_name'));
+        $this->assertSame('PT Uji KIT Konsultan IT', SiteSetting::value('company_name'));
 
         $this->put(route('admin.company.update'), ['name' => 'PT Profil Uji'])
             ->assertRedirect();

@@ -14,8 +14,8 @@ class ContactPageTest extends TestCase
         $response = $this->get(route('kontak'));
 
         $response->assertOk();
-        $response->assertSee('Bangun sesuatu yang');
-        $response->assertSee('Memulai Proyek');
+        $response->assertSee('Mari bicarakan proyek digital Anda.');
+        $response->assertSee('Formulir Konsultasi');
         $response->assertSee('Pertanyaan Umum');
         $response->assertSee('Kirim Permintaan');
     }

@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Dashboard — Admin Nusakode')
+@section('title', 'Dashboard — Admin KIT Konsultan IT')
 
 @section('content')
 @php
@@ -20,7 +20,7 @@ $statCards = [
 <header class="border-b border-neutral-200 pb-6">
     <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-600">Dashboard</p>
     <h1 class="mt-2 text-[22px] font-bold tracking-tight text-neutral-900 sm:text-2xl">{{ $greeting }}, {{ auth()->user()->name }}.</h1>
-    <p class="mt-1.5 text-sm text-neutral-500">Berikut ringkasan aktivitas NUSAKODE.</p>
+    <p class="mt-1.5 text-sm text-neutral-500">Berikut ringkasan aktivitas KIT Konsultan IT.</p>
 </header>
 
 {{-- Statistik: angka besar, label kecil, pemisah tipis konsisten. --}}

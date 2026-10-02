@@ -2,7 +2,7 @@
 
 @if ($announcement)
     <div id="promo-banner" data-promo
-        data-dismiss-cookie="nusakode_bar_dismissed"
+        data-dismiss-cookie="kit_bar_dismissed"
         data-dismiss-value="{{ $announcement->id }}"
         class="bg-brand-600 text-white">
         <div class="mx-auto flex max-w-7xl items-center justify-center gap-3 px-4 py-2 sm:px-6">

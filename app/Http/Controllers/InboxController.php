@@ -32,6 +32,7 @@ class InboxController extends Controller
 
         return response()->json([
             'messages' => $messages->map(fn (ChatMessage $message): array => $this->present($message))->values(),
+            'admin_typing' => $participant->adminIsTyping(),
         ]);
     }
 
@@ -47,6 +48,7 @@ class InboxController extends Controller
 
         $user = $request->user();
         $participant = $this->participantFor($user->id, $user->name, $user->email);
+        $isFirstMessage = ! $participant->messages()->exists();
 
         $message = $participant->messages()->create([
             'guest_token' => $participant->guest_token,
@@ -65,11 +67,29 @@ class InboxController extends Controller
             'user_last_read_message_id' => $message->id,
         ]);
 
-        if ($request->expectsJson()) {
-            return response()->json(['message' => $this->present($message)]);
+        $autoReply = $isFirstMessage
+            ? $participant->messages()->create([
+                'guest_token' => $participant->guest_token,
+                'sender' => 'admin',
+                'name' => 'Tim KIT Konsultan IT',
+                'body' => ChatMessage::WAITING_REPLY_MESSAGE,
+                'is_auto' => true,
+                'is_read' => true,
+            ])
+            : null;
+
+        if ($autoReply) {
+            $participant->update(['user_last_read_message_id' => $autoReply->id]);
         }
 
-        return back()->with('success', 'Pesan Anda terkirim. Tim Nusakode akan segera membalas.');
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => $this->present($message),
+                'auto_reply' => $autoReply ? $this->present($autoReply) : null,
+            ]);
+        }
+
+        return back()->with('success', 'Pesan Anda sudah diterima. Mohon menunggu balasan dari tim kami.');
     }
 
     private function participantFor(int $userId, string $name, string $email): ChatParticipant
@@ -96,7 +116,7 @@ class InboxController extends Controller
             'name' => $message->name,
             'body' => $message->body,
             'is_auto' => $message->is_auto,
-            'time' => $message->created_at->translatedFormat('d M, H:i'),
+            'time' => $message->timestampWib('d M, H:i'),
         ];
     }
 }

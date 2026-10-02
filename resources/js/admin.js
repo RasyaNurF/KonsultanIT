@@ -1,4 +1,4 @@
-// Panel admin Nusakode: sidebar responsif, dropdown profil, toast, dialog konfirmasi,
+// Panel admin KIT Konsultan IT: sidebar responsif, dropdown profil, toast, dialog konfirmasi,
 // dan helper upload media (resize + konversi ke WebP di sisi klien).
 
 const sidebar = document.querySelector('[data-admin-sidebar]');
@@ -318,8 +318,60 @@ const adminThread = document.querySelector('[data-admin-thread]');
 
 if (adminThread) {
     const pollUrl = adminThread.getAttribute('data-poll-url');
+    const typingUrl = adminThread.getAttribute('data-typing-url');
+    const replyBody = document.querySelector('[data-admin-reply-body]');
+    const replyForm = document.querySelector('[data-admin-reply-form]');
     const statusSelect = document.querySelector('[data-admin-status]');
     let lastId = Number(adminThread.getAttribute('data-last-id')) || 0;
+    let typingActive = false;
+    let typingHeartbeat = null;
+    let typingIdleTimer = null;
+
+    const sendTyping = (typing) => {
+        fetch(typingUrl, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? '',
+            },
+            body: JSON.stringify({ typing }),
+            keepalive: !typing,
+        }).catch(() => {});
+    };
+
+    const stopTyping = () => {
+        clearInterval(typingHeartbeat);
+        clearTimeout(typingIdleTimer);
+        typingHeartbeat = null;
+        typingIdleTimer = null;
+
+        if (typingActive) {
+            typingActive = false;
+            sendTyping(false);
+        }
+    };
+
+    const markTyping = () => {
+        if (!replyBody?.value.trim()) {
+            stopTyping();
+            return;
+        }
+
+        if (!typingActive) {
+            typingActive = true;
+            sendTyping(true);
+            typingHeartbeat = setInterval(() => sendTyping(true), 3000);
+        }
+
+        clearTimeout(typingIdleTimer);
+        typingIdleTimer = setTimeout(stopTyping, 4500);
+    };
+
+    replyBody?.addEventListener('input', markTyping);
+    replyBody?.addEventListener('blur', stopTyping);
+    replyForm?.addEventListener('submit', stopTyping);
+    window.addEventListener('pagehide', stopTyping);
 
     const isNearBottom = () => adminThread.scrollHeight - adminThread.scrollTop - adminThread.clientHeight < 80;
 

@@ -1,16 +1,16 @@
 @extends('layouts.site')
 
-@section('title', 'Tentang Kami — Nusakode')
-@section('meta-description', 'Profil PT Nusakode Teknologi: perusahaan jasa teknologi informasi di Jakarta sejak 2015. Visi, misi, nilai, dan tim kami.')
+@section('title', 'Tentang Kami — KIT Konsultan IT')
+@section('meta-description', 'Profil KIT Konsultan IT: perusahaan jasa teknologi informasi di Jakarta sejak 2015. Visi, misi, nilai, dan tim kami.')
 
 @section('content')
     {{-- ============ HERO ============ --}}
     <section class="bg-white">
         <div class="mx-auto max-w-7xl px-4 sm:px-6">
             <div class="max-w-3xl py-20 sm:py-28">
-                <p class="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.24em] text-navy-950"><span class="h-px w-10 bg-brand-600" aria-hidden="true"></span>Tentang Nusakode</p>
+                <p class="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.24em] text-navy-950"><span class="h-px w-10 bg-brand-600" aria-hidden="true"></span>Tentang KIT Konsultan IT</p>
                 <h1 class="mt-6 text-4xl font-extrabold leading-[1.05] tracking-tight text-balance text-navy-950 sm:text-6xl">Bekerja seperti divisi internal Anda.</h1>
-                <p class="mt-6 max-w-xl text-base leading-relaxed text-neutral-500">{{ $profile?->about ?: 'PT Nusakode Teknologi berdiri di Jakarta pada 2015. Kami melayani perusahaan menengah hingga enterprise — sebagai pelaksana proyek sekaligus mitra pemeliharaan jangka panjang.' }}</p>
+                <p class="mt-6 max-w-xl text-base leading-relaxed text-neutral-500">{{ $profile?->about ?: 'KIT Konsultan IT berdiri di Jakarta pada 2015. Kami melayani perusahaan menengah hingga enterprise — sebagai pelaksana proyek sekaligus mitra pemeliharaan jangka panjang.' }}</p>
                 <dl class="mt-12 flex flex-col gap-6 pt-8 sm:flex-row sm:gap-0 sm:divide-x sm:divide-neutral-200">
                     <div class="sm:pr-12"><dt class="sr-only">Pengalaman</dt><dd class="text-2xl font-extrabold text-navy-950">{{ $stats['experience'] }}</dd><dd class="mt-1 text-xs font-medium text-neutral-500">Tahun pengalaman</dd></div>
                     <div class="sm:px-12"><dt class="sr-only">Proyek</dt><dd class="text-2xl font-extrabold text-navy-950">{{ $stats['projects'] }}</dd><dd class="mt-1 text-xs font-medium text-neutral-500">Proyek selesai</dd></div>

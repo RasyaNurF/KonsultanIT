@@ -12,20 +12,21 @@ class PortfolioController extends Controller
 {
     public function index(Request $request): View
     {
-        $categories = Portfolio::query()
-            ->where('status', PublishStatus::Published->value)
+        $publishedPortfolios = Portfolio::query()
+            ->where('status', PublishStatus::Published->value);
+
+        $categories = (clone $publishedPortfolios)
             ->whereNotNull('category')
             ->distinct()
             ->orderBy('category')
             ->pluck('category');
 
-        $portfolios = Portfolio::query()
-            ->where('status', PublishStatus::Published->value)
+        $portfolios = (clone $publishedPortfolios)
             ->when($request->filled('kategori'), fn ($query) => $query->where('category', $request->string('kategori')->toString()))
             ->with(['client'])
             ->orderBy('sort_order')
             ->latest()
-            ->paginate(9)
+            ->paginate(6)
             ->withQueryString();
 
         return view('portfolios.index', [

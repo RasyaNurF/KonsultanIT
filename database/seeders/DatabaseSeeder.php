@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         User::query()->updateOrCreate(
             ['email' => 'admin@nusakode.id'],
             [
-                'name' => 'Admin Nusakode',
+                'name' => 'Admin KIT Konsultan IT',
                 'password' => Hash::make('password'),
                 'role' => AdminRole::SuperAdmin,
                 'job_title' => 'Administrator',
@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
         );
 
         SiteSetting::putMany([
-            'company_name' => 'PT Nusakode Teknologi',
+            'company_name' => 'KIT Konsultan IT',
             'tagline' => 'Mitra teknologi informasi untuk perusahaan Indonesia.',
             'email' => 'halo@nusakode.id',
             'phone' => '+62 21 5000 1234',
@@ -44,7 +44,7 @@ class DatabaseSeeder extends Seeder
             'facebook' => 'https://facebook.com/nusakode',
             'instagram' => 'https://instagram.com/nusakode',
             'linkedin' => 'https://linkedin.com/company/nusakode',
-            'copyright' => 'PT Nusakode Teknologi. Seluruh hak cipta dilindungi.',
+            'copyright' => 'KIT Konsultan IT. Seluruh hak cipta dilindungi.',
             'maintenance_mode' => '0',
         ]);
 

@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Profil — Admin Nusakode')
+@section('title', 'Profil — Admin KIT Konsultan IT')
 
 @section('content')
 <x-admin.page-header title="Profil" description="Kelola data akun dan kata sandi Anda." eyebrow="Admin" />

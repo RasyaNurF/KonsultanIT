@@ -16,7 +16,7 @@ class SitemapController extends Controller
         $urls = collect([
             '/',
             '/tentang',
-            '/layanan',
+            '/solusi',
             '/portfolio',
             '/blog',
             '/karier',
@@ -24,7 +24,7 @@ class SitemapController extends Controller
         ]);
 
         $urls = $urls
-            ->merge(Service::query()->where('status', PublishStatus::Published->value)->pluck('slug')->map(fn ($slug) => "/layanan/{$slug}"))
+            ->merge(Service::query()->where('status', PublishStatus::Published->value)->pluck('slug')->map(fn ($slug) => "/solusi/{$slug}"))
             ->merge(Portfolio::query()->where('status', PublishStatus::Published->value)->pluck('slug')->map(fn ($slug) => "/portfolio/{$slug}"))
             ->merge(Article::query()->where('status', PublishStatus::Published->value)->pluck('slug')->map(fn ($slug) => "/blog/{$slug}"))
             ->merge(Career::query()->where('status', PublishStatus::Published->value)->pluck('slug')->map(fn ($slug) => "/karier/{$slug}"))

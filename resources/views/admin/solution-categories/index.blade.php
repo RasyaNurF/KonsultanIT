@@ -1,9 +1,9 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Kategori Solusi — Admin Nusakode')
+@section('title', 'Kategori Solusi — Admin KIT Konsultan IT')
 
 @section('content')
-<x-admin.page-header title="Kategori Solusi" description="Kategori besar solusi NUSAKODE seperti Human Capital Management atau IT Security." eyebrow="Konten">
+<x-admin.page-header title="Kategori Solusi" description="Kategori besar solusi KIT Konsultan IT seperti Human Capital Management atau IT Security." eyebrow="Konten">
     <x-slot:actions>
         <x-admin.partials.button :href="route('admin.solution-categories.create')" variant="primary">
             <x-admin.icon name="plus" class="h-4 w-4" /> Tambah Kategori

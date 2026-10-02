@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Lamaran '.$application->name.' — Admin Nusakode')
+@section('title', 'Lamaran '.$application->name.' — Admin KIT Konsultan IT')
 
 @section('content')
 <x-admin.page-header :title="$application->name" :description="$application->email" eyebrow="Lamaran">

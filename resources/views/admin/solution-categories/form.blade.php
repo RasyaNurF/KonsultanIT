@@ -1,12 +1,12 @@
 @extends('admin.layouts.app')
 
-@section('title', ($category->exists ? 'Ubah Kategori Solusi' : 'Tambah Kategori Solusi').' — Admin Nusakode')
+@section('title', ($category->exists ? 'Ubah Kategori Solusi' : 'Tambah Kategori Solusi').' — Admin KIT Konsultan IT')
 
 @section('content')
 <x-admin.page-header
     :title="$category->exists ? 'Ubah Kategori Solusi' : 'Tambah Kategori Solusi'"
     eyebrow="Konten"
-    :description="$category->exists ? 'Perbarui kategori '.$category->name.'.' : 'Tambahkan kategori solusi baru untuk NUSAKODE.'">
+    :description="$category->exists ? 'Perbarui kategori '.$category->name.'.' : 'Tambahkan kategori solusi baru untuk KIT Konsultan IT.'">
     <x-slot:actions>
         <x-admin.partials.button :href="route('admin.solution-categories.index')" variant="secondary">Batal</x-admin.partials.button>
     </x-slot:actions>

@@ -1,6 +1,6 @@
 @extends('layouts.site')
 
-@section('title', $career->title.' — Karier Nusakode')
+@section('title', $career->title.' — Karier KIT Konsultan IT')
 @section('meta-description', \Illuminate\Support\Str::limit($career->description ?? $career->title, 160))
 
 @section('content')
@@ -139,7 +139,7 @@
                     @foreach ($others as $item)
                         <a href="{{ route('karier.show', $item->slug) }}" class="group flex items-center justify-between gap-6 py-5">
                             <span>
-                                <span class="text-xs font-bold uppercase tracking-[0.18em] text-neutral-400">{{ $item->department ?: 'Nusakode' }}</span>
+                                <span class="text-xs font-bold uppercase tracking-[0.18em] text-neutral-400">{{ $item->department ?: 'KIT Konsultan IT' }}</span>
                                 <span class="mt-1 block font-bold tracking-tight text-navy-950 transition group-hover:text-brand-700">{{ $item->title }}</span>
                             </span>
                             <svg class="h-5 w-5 shrink-0 text-neutral-300 transition-all group-hover:translate-x-1 group-hover:text-navy-800" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>

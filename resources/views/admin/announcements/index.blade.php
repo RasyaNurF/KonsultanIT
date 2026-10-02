@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Pengumuman — Admin Nusakode')
+@section('title', 'Pengumuman — Admin KIT Konsultan IT')
 
 @section('content')
 <x-admin.page-header title="Pengumuman" description="Bilah atas, pop-up masuk, dan banner persetujuan cookie." eyebrow="Website">

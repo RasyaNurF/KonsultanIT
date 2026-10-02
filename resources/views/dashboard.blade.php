@@ -1,7 +1,7 @@
 @extends('layouts.site')
 
-@section('title', 'Dashboard — Nusakode')
-@section('meta-description', 'Ringkasan akun dan percakapan Nusakode Anda.')
+@section('title', 'Dashboard — KIT Konsultan IT')
+@section('meta-description', 'Ringkasan akun dan percakapan KIT Konsultan IT Anda.')
 
 @section('content')
 @php($user = auth()->user())
@@ -93,7 +93,7 @@
                 <div class="flex items-center justify-between gap-4 border-b border-neutral-100 px-6 py-5">
                     <div>
                         <h2 class="text-base font-extrabold text-navy-950">Percakapan Terakhir</h2>
-                        <p class="mt-0.5 text-xs text-neutral-500">Balasan tim Nusakode muncul otomatis di sini.</p>
+                        <p class="mt-0.5 text-xs text-neutral-500">Balasan tim KIT Konsultan IT muncul otomatis di sini.</p>
                     </div>
                     <button type="button" data-chat-toggle class="shrink-0 rounded-full bg-navy-950 px-4 py-2 text-[13px] font-bold text-white transition hover:bg-navy-800">Buka</button>
                 </div>
@@ -123,7 +123,7 @@
                                 </span>
                                 <div class="min-w-0 flex-1">
                                     <div class="flex items-baseline justify-between gap-3">
-                                        <p class="text-[13px] font-bold text-navy-950">{{ $isOwn ? 'Anda' : ($message->name ?: 'Tim Nusakode') }}</p>
+                                        <p class="text-[13px] font-bold text-navy-950">{{ $isOwn ? 'Anda' : ($message->name ?: 'Tim KIT Konsultan IT') }}</p>
                                         <span class="shrink-0 text-[11px] text-neutral-400">{{ $message->created_at->diffForHumans(short: true) }}</span>
                                     </div>
                                     <p class="mt-0.5 line-clamp-2 text-sm text-neutral-600">{{ $message->body }}</p>
@@ -139,7 +139,7 @@
                 <div>
                     <div class="flex items-end justify-between gap-4">
                         <h2 class="text-base font-extrabold text-navy-950">Bacaan untuk Anda</h2>
-                        <a href="{{ route('blog.index') }}" class="text-[13px] font-bold text-brand-600 transition hover:text-brand-700">Lihat semua artikel →</a>
+                        <a href="{{ route('blog.index') }}" class="text-[13px] font-bold text-brand-600 transition hover:text-brand-700">Lihat semua artikel â†’</a>
                     </div>
 
                     <div class="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

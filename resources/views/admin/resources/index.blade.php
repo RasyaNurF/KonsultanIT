@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Resources — Admin Nusakode')
+@section('title', 'Resources — Admin KIT Konsultan IT')
 
 @section('content')
 <x-admin.page-header title="Resources" description="Kelola Event, Whitepaper, E-book, News, dan Go-Live." eyebrow="Konten">

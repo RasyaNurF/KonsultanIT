@@ -15,7 +15,6 @@ use App\Models\Industry;
 use App\Models\Portfolio;
 use App\Models\Service;
 use App\Models\SiteSetting;
-use App\Models\SolutionCategory;
 use App\Models\Testimonial;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
@@ -51,25 +50,12 @@ class AppServiceProvider extends ServiceProvider
                     ->where('status', PublishStatus::Published->value)
                     ->orderBy('sort_order')
                     ->orderBy('title')
-                    ->limit(6)
-                    ->get();
+                    ->get(['slug', 'title']);
             } catch (Throwable) {
                 $navServices = collect();
             }
 
             $view->with('navServices', $navServices);
-
-            try {
-                $navSolutionCategories = SolutionCategory::query()
-                    ->where('status', PublishStatus::Published->value)
-                    ->with(['solutions' => fn ($query) => $query->where('status', PublishStatus::Published->value)->orderBy('sort_order')])
-                    ->orderBy('sort_order')
-                    ->get();
-            } catch (Throwable) {
-                $navSolutionCategories = collect();
-            }
-
-            $view->with('navSolutionCategories', $navSolutionCategories);
 
             $chatUnread = 0;
             $user = auth()->user();
@@ -269,7 +255,7 @@ class AppServiceProvider extends ServiceProvider
                 'img' => $media($service->image_path, 'img/work-1.jpg'),
                 'alt' => $service->title,
                 'diagram' => $service->image_path === null && $index === 2,
-                'url' => route('layanan.show', $service->slug),
+                'url' => route('solusi.show', $service->slug),
             ])->all(),
 
             'dbIndustries' => $industries->map(fn (Industry $industry) => [

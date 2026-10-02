@@ -17,7 +17,7 @@
 <div class="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
     {{-- Kiri: thread + form balasan --}}
     <x-admin.card class="overflow-hidden">
-        <div data-admin-thread data-poll-url="{{ route('admin.messages.poll', $participant) }}" data-last-id="{{ $messages->last()?->id ?? 0 }}"
+        <div data-admin-thread data-poll-url="{{ route('admin.messages.poll', $participant) }}" data-typing-url="{{ route('admin.messages.typing', $participant) }}" data-last-id="{{ $messages->last()?->id ?? 0 }}"
             class="flex max-h-[560px] flex-col gap-3 overflow-y-auto p-5">
             @forelse ($messages as $message)
                 @php($isInbound = $message->sender !== 'admin')
@@ -26,7 +26,7 @@
                         {{ $message->body }}
                     </div>
                     <span class="mt-1 text-[11px] text-neutral-400">
-                        {{ $message->name ?: ($isInbound ? 'Pengunjung' : 'Admin') }} · {{ $message->created_at->format('H:i d M') }}
+                        {{ $message->name ?: ($isInbound ? 'Pengunjung' : 'Admin') }} · {{ $message->timestampWib('H:i d M') }}
                     </span>
                 </div>
             @empty
@@ -34,10 +34,10 @@
             @endforelse
         </div>
 
-        <form method="post" action="{{ route('admin.messages.reply', $participant) }}" class="border-t border-neutral-200 p-5">
+        <form data-admin-reply-form method="post" action="{{ route('admin.messages.reply', $participant) }}" class="border-t border-neutral-200 p-5">
             @csrf
             <x-admin.field label="Balasan" name="body" :required="true">
-                <textarea name="body" rows="3" required maxlength="4000" placeholder="Tulis balasan…"
+                <textarea data-admin-reply-body name="body" rows="3" required maxlength="4000" placeholder="Tulis balasan…"
                     class="h-auto w-full resize-y rounded-md border border-neutral-200 px-3 py-2.5 text-sm text-neutral-900 outline-none transition placeholder:text-neutral-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-100">{{ old('body') }}</textarea>
             </x-admin.field>
             <div class="mt-4 flex justify-end">
@@ -87,7 +87,7 @@
                 </div>
                 <div class="grid grid-cols-[100px_1fr] gap-4 py-3">
                     <dt class="text-[13px] font-medium text-neutral-500">Dibuat</dt>
-                    <dd class="text-[13px] text-neutral-900">{{ $participant->created_at->translatedFormat('d F Y H:i') }}</dd>
+                    <dd class="text-[13px] text-neutral-900">{{ $participant->created_at->copy()->timezone('Asia/Jakarta')->locale('id')->translatedFormat('d F Y H:i') }} WIB</dd>
                 </div>
             </dl>
         </x-admin.card>

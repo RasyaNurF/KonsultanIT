@@ -50,7 +50,7 @@ class AccountDashboardTest extends TestCase
             'chat_participant_id' => $participant->id,
             'guest_token' => $participant->guest_token,
             'sender' => 'admin',
-            'name' => 'Admin Nusakode',
+            'name' => 'Admin KIT Konsultan IT',
             'body' => 'Terima kasih, kami kirimkan penawaran hari ini.',
             'is_read' => true,
         ]);
@@ -72,7 +72,7 @@ class AccountDashboardTest extends TestCase
             'chat_participant_id' => $participant->id,
             'guest_token' => $participant->guest_token,
             'sender' => 'admin',
-            'name' => 'Admin Nusakode',
+            'name' => 'Admin KIT Konsultan IT',
             'body' => 'Balasan baru untuk Anda.',
             'is_read' => true,
         ]);

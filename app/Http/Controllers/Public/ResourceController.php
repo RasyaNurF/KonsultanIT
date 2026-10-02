@@ -10,20 +10,6 @@ use Illuminate\View\View;
 
 class ResourceController extends Controller
 {
-    public function index(): View
-    {
-        $resources = Resource::query()
-            ->where('status', PublishStatus::Published->value)
-            ->orderByDesc('published_at')
-            ->latest('id')
-            ->paginate(9);
-
-        return view('resources.index', [
-            'resources' => $resources,
-            'types' => ResourceType::cases(),
-        ]);
-    }
-
     public function type(string $type): View
     {
         $resourceType = ResourceType::tryFrom($type);
@@ -36,7 +22,16 @@ class ResourceController extends Controller
             ->latest('id')
             ->paginate(9);
 
-        return view('resources.type', [
+        $view = match ($resourceType) {
+            ResourceType::Event => 'resources.event-index',
+            ResourceType::News => 'resources.news-index',
+            ResourceType::GoLive => 'resources.go-live-index',
+            ResourceType::Ebook => 'resources.ebook-index',
+            ResourceType::Whitepaper => 'resources.whitepaper-index',
+            default => 'resources.type',
+        };
+
+        return view($view, [
             'resourceType' => $resourceType,
             'resources' => $resources,
             'types' => ResourceType::cases(),
@@ -57,7 +52,16 @@ class ResourceController extends Controller
             ->limit(3)
             ->get();
 
-        return view('resources.show', [
+        $view = match ($resourceType) {
+            ResourceType::Event => 'resources.event-show',
+            ResourceType::News => 'resources.news-show',
+            ResourceType::GoLive => 'resources.go-live-show',
+            ResourceType::Ebook => 'resources.ebook-show',
+            ResourceType::Whitepaper => 'resources.whitepaper-show',
+            default => 'resources.show',
+        };
+
+        return view($view, [
             'resource' => $resource,
             'resourceType' => $resourceType,
             'related' => $related,

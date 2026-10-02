@@ -49,17 +49,14 @@ class ChatController extends Controller
         }
 
         $participant = ChatParticipant::query()->firstOrNew(['guest_token' => $token]);
+        $isFirstMessage = ! $participant->exists || ! $participant->messages()->exists();
         $participant->fill([
             'name' => $name,
             'email' => $email,
             'subject' => $participant->subject ?? Str::limit($validated['body'], 120, ''),
-            'status' => $participant->exists ? $participant->status : MessageStatus::Unread->value,
+            'status' => MessageStatus::Unread->value,
             'last_message_at' => now(),
         ])->save();
-
-        if ($participant->messages()->where('sender', 'admin')->exists()) {
-            $participant->update(['status' => MessageStatus::Replied->value]);
-        }
 
         $guestMessage = ChatMessage::create([
             'chat_participant_id' => $participant->id,
@@ -70,18 +67,21 @@ class ChatController extends Controller
             'body' => $validated['body'],
         ]);
 
-        $autoReply = ChatMessage::create([
-            'chat_participant_id' => $participant->id,
-            'guest_token' => $token,
-            'sender' => 'admin',
-            'name' => 'Admin Nusakode',
-            'body' => "Terima kasih {$name}! Pesan Anda sudah kami terima dan akan ditindaklanjuti maksimal 1x24 jam kerja. Silakan lanjutkan chat bila ada tambahan.",
-            'is_auto' => true,
-            'is_read' => true,
-        ]);
+        $autoReply = $isFirstMessage
+            ? ChatMessage::create([
+                'chat_participant_id' => $participant->id,
+                'guest_token' => $token,
+                'sender' => 'admin',
+                'name' => 'Tim KIT Konsultan IT',
+                'body' => ChatMessage::WAITING_REPLY_MESSAGE,
+                'is_auto' => true,
+                'is_read' => true,
+            ])
+            : null;
 
         return response()->json([
             'messages' => collect([$guestMessage, $autoReply])
+                ->filter()
                 ->map(fn (ChatMessage $message): array => $this->present($message))
                 ->values(),
         ]);
@@ -102,7 +102,7 @@ class ChatController extends Controller
             'name' => $message->name,
             'body' => $message->body,
             'is_auto' => $message->is_auto,
-            'time' => $message->created_at->format('H:i'),
+            'time' => $message->timestampWib(),
         ];
     }
 }

@@ -1,9 +1,9 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Proyek — Admin Nusakode')
+@section('title', 'Proyek — Admin KIT Konsultan IT')
 
 @section('content')
-<x-admin.page-header title="Proyek" description="Proyek yang sedang dan telah dikerjakan NUSAKODE." eyebrow="Proyek">
+<x-admin.page-header title="Proyek" description="Proyek yang sedang dan telah dikerjakan KIT Konsultan IT." eyebrow="Proyek">
     <x-slot:actions>
         <x-admin.partials.button :href="route('admin.projects.create')" variant="primary">
             <x-admin.icon name="plus" class="h-4 w-4" /> Tambah Proyek
@@ -62,7 +62,7 @@
                         @endif
                     </td>
                     <td class="whitespace-nowrap px-5 py-3.5 text-neutral-600 tabular-nums">
-                        {{ $project->started_at?->format('M Y') ?? '—' }} → {{ $project->finished_at?->format('M Y') ?? 'Sekarang' }}
+                        {{ $project->started_at?->format('M Y') ?? '—' }} â†’ {{ $project->finished_at?->format('M Y') ?? 'Sekarang' }}
                     </td>
                     <td class="px-5 py-3.5"><x-admin.status-badge :status="$project->status" /></td>
                     <td class="px-5 py-3.5">

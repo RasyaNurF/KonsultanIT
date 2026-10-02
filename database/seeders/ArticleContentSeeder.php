@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Enums\PublishStatus;
 use App\Models\Article;
 use App\Models\BlogCategory;
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
@@ -24,7 +23,7 @@ class ArticleContentSeeder extends Seeder
                 ['slug' => Str::slug($name)],
                 [
                     'name' => $name,
-                    'description' => 'Artikel '.$name.' dari tim Nusakode.',
+                    'description' => 'Artikel '.$name.' dari tim KIT Konsultan IT.',
                     'sort_order' => $index + 1,
                     'status' => PublishStatus::Published,
                 ],
@@ -32,10 +31,32 @@ class ArticleContentSeeder extends Seeder
         }
 
         $categoryIds = BlogCategory::query()->pluck('id', 'name');
-        $authorIds = User::query()->orderBy('id')->pluck('id')->all();
-        $author = fn (int $i) => $authorIds[$i % max(1, count($authorIds))] ?? null;
 
         $articles = [
+            [
+                'Merencanakan Aplikasi Bisnis yang Benar-Benar Dipakai Tim',
+                'Panduan',
+                'img/editorial/insight-team.png',
+                '1 Oktober 2026',
+                'Aplikasi yang berhasil dimulai dari alur kerja pengguna, bukan daftar fitur yang panjang. Berikut langkah praktis menyusun fondasinya.',
+                "Mulai dari pekerjaan yang paling sering dilakukan. Sebelum membahas layar dan teknologi, amati bagaimana tim menyelesaikan satu tugas dari awal sampai akhir. Catat data yang mereka cari, keputusan yang perlu diambil, dan hambatan yang membuat pekerjaan berulang. Peta sederhana ini jauh lebih berguna daripada daftar fitur tanpa konteks.\n\nLibatkan pengguna sejak awal. Wawancarai orang yang akan memakai sistem setiap hari, bukan hanya penanggung jawab proyek. Tanyakan contoh pekerjaan nyata dan minta mereka menunjukkan alat yang dipakai sekarang. Perbedaan antara proses resmi dan praktik di lapangan sering menjadi sumber kebutuhan paling penting.\n\nTentukan hasil yang ingin diukur. Misalnya waktu memproses satu permintaan, jumlah kesalahan input, atau lamanya menyiapkan laporan. Dengan ukuran awal yang jelas, tim dapat mengevaluasi apakah aplikasi baru benar-benar memperbaiki pekerjaan.\n\nBangun versi awal dengan alur inti. Prioritaskan satu proses yang utuh dan dapat diuji oleh pengguna. Fitur tambahan bisa menyusul setelah alur utama terbukti bermanfaat. Pendekatan bertahap memudahkan umpan balik dan mengurangi risiko mengembangkan bagian yang ternyata jarang dipakai.\n\nSiapkan pemilik proses dan rencana adopsi. Tentukan siapa yang menjawab pertanyaan pengguna, memperbaiki data awal, dan memutuskan perubahan berikutnya. Aplikasi yang baik tetap membutuhkan dukungan manusia agar menjadi kebiasaan kerja baru.",
+            ],
+            [
+                'Lima Keputusan Penting Sebelum Mengintegrasikan Dua Sistem',
+                'Teknologi',
+                'img/editorial/news-workspace.png',
+                '29 September 2026',
+                'Integrasi bukan sekadar menghubungkan API. Kepemilikan data, kegagalan sinkronisasi, dan keamanan perlu disepakati sejak awal.',
+                "Ketika dua sistem saling bertukar data, pertanyaan pertama bukan cara mengirimnya, melainkan siapa pemilik data yang benar. Sepakati sistem sumber untuk setiap informasi penting, seperti data pelanggan, harga, dan status transaksi. Tanpa keputusan ini, koreksi pada satu sistem bisa ditimpa oleh sistem lain.\n\nPilih kapan data harus diperbarui. Tidak semua proses membutuhkan sinkronisasi seketika. Laporan harian mungkin cukup diperbarui terjadwal, sedangkan status pembayaran menuntut pembaruan lebih cepat. Kebutuhan waktu menentukan rancangan integrasi dan biaya operasionalnya.\n\nRancang skenario gagal sebagai bagian dari alur normal. Koneksi dapat terputus, data dapat ditolak, dan layanan pihak ketiga dapat melambat. Tentukan antrean, percobaan ulang, catatan kesalahan, dan prosedur pemeriksaan manual sebelum integrasi digunakan di produksi.\n\nBatasi akses sesuai kebutuhan. Gunakan kredensial terpisah, izin minimum, serta pencatatan aktivitas yang dapat ditinjau. Data sensitif perlu dilindungi saat dikirim dan saat disimpan. Tim juga perlu tahu siapa yang bertanggung jawab jika suatu akses harus dicabut.\n\nUji dengan data yang menyerupai kondisi nyata. Periksa duplikasi, nilai kosong, perubahan format, dan pembaruan berulang. Keberhasilan satu permintaan contoh belum cukup membuktikan integrasi siap digunakan setiap hari.",
+            ],
+            [
+                'Checklist Peluncuran Website Perusahaan yang Sering Terlewat',
+                'Operasional',
+                'img/work-3.jpg',
+                '25 September 2026',
+                'Sebelum website ditayangkan, periksa kinerja, aksesibilitas, konten, analitik, dan alur kontak agar pengunjung mendapat pengalaman yang utuh.',
+                "Peluncuran website bukan akhir dari proyek desain. Inilah saat halaman mulai bertemu pengunjung, mesin pencari, dan perangkat yang berbeda. Pemeriksaan akhir sebaiknya dilakukan dengan daftar yang dapat diulang, bukan sekadar melihat halaman utama sekali.\n\nPeriksa seluruh jalur penting. Coba navigasi, formulir kontak, tombol tindakan, dan tautan dari halaman yang berbeda. Pastikan pesan sukses dan gagal mudah dipahami. Formulir yang tampil rapi tetapi tidak mengirim pesan adalah kegagalan yang sering baru diketahui setelah ada calon klien yang hilang.\n\nUji pada layar dan koneksi yang berbeda. Buka halaman di ponsel, tablet, dan desktop. Cek ukuran teks, area tombol, serta apakah gambar memperlambat halaman di jaringan seluler. Gambar sebaiknya mempunyai teks alternatif yang menjelaskan fungsinya.\n\nRapikan informasi untuk pencarian. Setiap halaman penting memerlukan judul yang spesifik, deskripsi singkat, dan alamat yang mudah dibaca. Periksa pula apakah halaman yang tidak perlu muncul di pencarian sudah ditandai dengan tepat.\n\nTetapkan cara memantau setelah tayang. Pantau kesalahan formulir, halaman yang paling sering dikunjungi, dan pertanyaan masuk. Temuan pada minggu pertama menjadi bahan perbaikan yang lebih berharga daripada menebak kebutuhan pengguna sebelum peluncuran.",
+            ],
             [
                 'Menyusun Kerangka Acuan Kerja Proyek Software Agar Tidak Bengkak',
                 'Panduan',
@@ -182,7 +203,7 @@ class ArticleContentSeeder extends Seeder
             ],
         ];
 
-        foreach ($articles as $index => [$title, $category, $image, $date, $excerpt, $body]) {
+        foreach ($articles as [$title, $category, $image, $date, $excerpt, $body]) {
             Article::query()->updateOrCreate(
                 ['slug' => Str::slug($title)],
                 [
@@ -192,7 +213,7 @@ class ArticleContentSeeder extends Seeder
                     'featured_image_path' => $image,
                     'excerpt' => $excerpt,
                     'body' => $body,
-                    'author_id' => $author($index),
+                    'author_id' => null,
                     'status' => PublishStatus::Published,
                     'published_at' => Carbon::parse(str_replace(['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'], ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], $date)),
 

@@ -1,7 +1,7 @@
 @extends('layouts.site')
 
-@section('title', 'Solusi — Nusakode')
-@section('meta-description', 'Kategori solusi Nusakode: Human Capital Management, CRM & Customer Experience, Infrastruktur TI, IT Security, ERP & Business Intelligence.')
+@section('title', 'Solusi — KIT Konsultan IT')
+@section('meta-description', 'Kategori solusi KIT Konsultan IT: Human Capital Management, CRM & Customer Experience, Infrastruktur TI, IT Security, ERP & Business Intelligence.')
 
 @section('content')
     <section class="bg-white">

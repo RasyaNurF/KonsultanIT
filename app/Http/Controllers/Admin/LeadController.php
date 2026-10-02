@@ -84,7 +84,7 @@ class LeadController extends Controller
             ->latest()
             ->get();
 
-        $filename = 'leads-nusakode-'.now()->format('Y-m-d').'.csv';
+        $filename = 'leads-kit-'.now()->format('Y-m-d').'.csv';
 
         return response()->streamDownload(function () use ($leads): void {
             $handle = fopen('php://output', 'w');

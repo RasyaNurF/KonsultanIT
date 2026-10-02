@@ -1,9 +1,9 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Testimonial — Admin Nusakode')
+@section('title', 'Testimonial — Admin KIT Konsultan IT')
 
 @section('content')
-<x-admin.page-header title="Testimonial" description="Kutipan dan ulasan dari klien NUSAKODE." eyebrow="Konten">
+<x-admin.page-header title="Testimonial" description="Kutipan dan ulasan dari klien KIT Konsultan IT." eyebrow="Konten">
     <x-slot:actions>
         <x-admin.partials.button :href="route('admin.testimonials.create')" variant="primary">
             <x-admin.icon name="plus" class="h-4 w-4" /> Tambah Testimonial

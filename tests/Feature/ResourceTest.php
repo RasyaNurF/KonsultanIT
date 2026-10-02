@@ -12,7 +12,7 @@ class ResourceTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_resource_index_lists_published_resources(): void
+    public function test_resource_index_is_removed_while_category_pages_remain_available(): void
     {
         Resource::create([
             'type' => ResourceType::Whitepaper,
@@ -25,7 +25,9 @@ class ResourceTest extends TestCase
             'status' => PublishStatus::Draft,
         ]);
 
-        $this->get(route('resources.index'))
+        $this->get('/resources')->assertNotFound();
+
+        $this->get(route('resources.whitepaper'))
             ->assertOk()
             ->assertSee('Panduan Keamanan')
             ->assertDontSee('Kabar Draft');

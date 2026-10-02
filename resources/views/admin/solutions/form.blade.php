@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', ($solution->exists ? 'Ubah Solusi' : 'Tambah Solusi').' — Admin Nusakode')
+@section('title', ($solution->exists ? 'Ubah Solusi' : 'Tambah Solusi').' — Admin KIT Konsultan IT')
 
 @php
     $featuresText = old('features_text', implode("\n", $solution->features ?? []));

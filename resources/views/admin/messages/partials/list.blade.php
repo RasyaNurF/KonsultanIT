@@ -20,7 +20,7 @@
                 <td class="px-5 py-3.5 text-neutral-600">{{ $p->subject ? \Illuminate\Support\Str::limit($p->subject, 60) : '—' }}</td>
                 <td class="px-5 py-3.5 text-neutral-600 tabular-nums">{{ $p->messages_count }} pesan</td>
                 <td class="px-5 py-3.5"><x-admin.status-badge :status="\App\Enums\MessageStatus::from($p->status)" /></td>
-                <td class="whitespace-nowrap px-5 py-3.5 text-neutral-500">{{ $p->last_message_at?->diffForHumans(short: true) ?? '—' }}</td>
+                <td class="whitespace-nowrap px-5 py-3.5 text-neutral-500">{{ $p->last_message_at?->locale('id')->diffForHumans(short: true) ?? '—' }}</td>
                 <td class="px-5 py-3.5">
                     <x-admin.partials.row-actions
                         :view="route('admin.messages.show', $p)"

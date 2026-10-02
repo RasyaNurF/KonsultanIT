@@ -9,8 +9,6 @@ use App\Models\Career;
 use App\Models\Portfolio;
 use App\Models\Resource;
 use App\Models\Service;
-use App\Models\Solution;
-use App\Models\SolutionCategory;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -26,9 +24,6 @@ class PublicPagesSmokeTest extends TestCase
         $article = Article::create(['title' => 'Artikel A', 'status' => PublishStatus::Published, 'published_at' => now()]);
         $career = Career::create(['title' => 'Karier A', 'status' => PublishStatus::Published]);
 
-        $category = SolutionCategory::create(['name' => 'Kategori A', 'status' => PublishStatus::Published]);
-        $solution = Solution::create(['solution_category_id' => $category->id, 'title' => 'Solusi A', 'status' => PublishStatus::Published]);
-
         $files = [
             Resource::create(['type' => 'event', 'title' => 'Event A', 'starts_at' => now()->addWeek(), 'status' => PublishStatus::Published]),
             Resource::create(['type' => 'go-live', 'title' => 'GoLive A', 'status' => PublishStatus::Published]),
@@ -40,11 +35,8 @@ class PublicPagesSmokeTest extends TestCase
         $paths = [
             '/',
             '/tentang',
-            '/layanan',
-            '/layanan/'.$service->slug,
             '/solusi',
-            '/solusi/'.$category->slug,
-            '/solusi/'.$category->slug.'/'.$solution->slug,
+            '/solusi/'.$service->slug,
             '/portfolio',
             '/portfolio/'.$portfolio->slug,
             '/blog',
@@ -52,7 +44,6 @@ class PublicPagesSmokeTest extends TestCase
             '/karier',
             '/karier/'.$career->slug,
             '/kontak',
-            '/resources',
             '/events',
             '/go-live',
             '/whitepaper',
@@ -64,6 +55,11 @@ class PublicPagesSmokeTest extends TestCase
         foreach ($paths as $path) {
             $this->get($path)->assertOk();
         }
+
+        $this->get('/resources')->assertNotFound();
+
+        $this->get('/layanan')->assertStatus(301)->assertRedirect('/solusi');
+        $this->get('/layanan/'.$service->slug)->assertStatus(301)->assertRedirect('/solusi/'.$service->slug);
 
         foreach ($files as $file) {
             $this->get('/resources/'.$file->type->value.'/'.$file->slug)->assertOk();

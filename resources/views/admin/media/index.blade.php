@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Media Library — Admin Nusakode')
+@section('title', 'Media Library — Admin KIT Konsultan IT')
 
 @section('content')
 <x-admin.page-header title="Media Library" description="Gambar dan dokumen yang dipakai di seluruh website." eyebrow="Konten" />

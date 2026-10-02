@@ -162,7 +162,7 @@ class ContentManagementTest extends TestCase
 
         $this->actingAs($admin)
             ->put(route('admin.company.update'), [
-                'name' => 'PT Nusakode Teknologi',
+                'name' => 'KIT Konsultan IT',
                 'vision' => 'Visi baru.',
             ])
             ->assertRedirect(route('admin.company.edit'));

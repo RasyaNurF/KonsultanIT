@@ -15,7 +15,7 @@ class CompanyProfileController extends Controller
 
     public function edit(): View
     {
-        $profile = CompanyProfile::active() ?? new CompanyProfile(['name' => 'PT Nusakode Teknologi']);
+        $profile = CompanyProfile::active() ?? new CompanyProfile(['name' => 'KIT Konsultan IT']);
 
         return view('admin.company-profile.edit', [
             'breadcrumbs' => [

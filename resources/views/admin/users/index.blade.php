@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Pengguna — Admin Nusakode')
+@section('title', 'Pengguna — Admin KIT Konsultan IT')
 
 @section('content')
 <x-admin.page-header title="Pengguna" description="Akun admin yang dapat mengakses panel." eyebrow="Admin">

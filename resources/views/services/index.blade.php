@@ -1,16 +1,15 @@
 @extends('layouts.site')
 
-@section('title', 'Layanan — Nusakode')
-@section('meta-description', 'Layanan Nusakode: pengembangan web & aplikasi, sistem informasi bisnis, integrasi API, aplikasi mobile, UI/UX, dan maintenance.')
+@section('title', 'Solusi — KIT Konsultan IT')
+@section('meta-description', 'Jelajahi solusi digital KIT Konsultan IT: pengembangan aplikasi web dan mobile, sistem informasi bisnis, integrasi API, UI/UX, dan pemeliharaan sistem.')
 
 @section('content')
     <section class="bg-white">
         <div class="mx-auto max-w-7xl px-4 sm:px-6">
             <div class="max-w-3xl py-20 sm:py-28">
-                <p class="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.24em] text-navy-950"><span class="h-px w-10 bg-brand-600" aria-hidden="true"></span>Layanan</p>
+                <p class="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.24em] text-navy-950"><span class="h-px w-10 bg-brand-600" aria-hidden="true"></span>Solusi</p>
                 <h1 class="mt-6 text-4xl font-extrabold leading-[1.05] tracking-tight text-balance text-navy-950 sm:text-6xl">Dibangun dan dirawat langsung oleh tim kami.</h1>
-                <p class="mt-6 max-w-xl text-base leading-relaxed text-neutral-500">Layanan adalah jasa yang dikerjakan engineer Nusakode — dari pengembangan aplikasi hingga pemeliharaan sistem. Butuh produk mitra seperti HRIS, CRM, cloud, atau ERP? Lihat katalog <a href="{{ route('solusi.index') }}" class="font-semibold text-brand-700 underline underline-offset-2 transition hover:text-brand-600">Solusi</a>.</p>
-                <a href="{{ route('solusi.index') }}" class="group mt-8 inline-flex items-center gap-2 text-sm font-bold text-navy-950 transition hover:text-brand-700">Lihat produk mitra kami<svg class="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                <p class="mt-6 max-w-xl text-base leading-relaxed text-neutral-500">Kami merancang, membangun, dan merawat solusi digital sesuai kebutuhan bisnis — mulai dari aplikasi hingga integrasi sistem.</p>
             </div>
         </div>
     </section>
@@ -18,8 +17,8 @@
     @if ($services->isEmpty())
         <section class="border-t border-neutral-100">
             <div class="mx-auto max-w-3xl px-4 py-20 text-center sm:px-6 sm:py-28">
-                <p class="text-lg font-bold text-navy-950">Daftar layanan segera hadir.</p>
-                <p class="mt-2 text-sm text-neutral-500">Silakan hubungi kami untuk informasi layanan.</p>
+                <p class="text-lg font-bold text-navy-950">Daftar solusi segera hadir.</p>
+                <p class="mt-2 text-sm text-neutral-500">Silakan hubungi kami untuk informasi solusi.</p>
                 <a href="{{ route('kontak') }}" class="mt-8 inline-flex items-center gap-2 rounded-full bg-brand-600 px-8 py-3.5 text-sm font-bold text-white transition hover:bg-brand-500">Hubungi Kami</a>
             </div>
         </section>
@@ -38,8 +37,8 @@
                                 @if ($service->technologyList())
                                     <p class="mt-4 text-[13px] font-medium text-neutral-400">{!! implode(' &nbsp;·&nbsp; ', array_map('e', $service->technologyList())) !!}</p>
                                 @endif
-                                <a href="{{ route('layanan.show', $service->slug) }}" class="group mt-8 inline-flex items-center gap-2 text-[13px] font-bold text-navy-950">
-                                    Lihat detail layanan
+                                <a href="{{ route('solusi.show', $service->slug) }}" class="group mt-8 inline-flex items-center gap-2 text-[13px] font-bold text-navy-950">
+                                    Lihat detail solusi
                                     <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                                 </a>
                             </div>

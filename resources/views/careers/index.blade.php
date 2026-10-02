@@ -1,7 +1,7 @@
 @extends('layouts.site')
 
-@section('title', 'Karier — Nusakode')
-@section('meta-description', 'Karier di Nusakode: bergabung dengan tim teknologi yang membangun sistem perusahaan Indonesia.')
+@section('title', 'Karier — KIT Konsultan IT')
+@section('meta-description', 'Karier di KIT Konsultan IT: bergabung dengan tim teknologi yang membangun sistem perusahaan Indonesia.')
 
 @section('content')
     <section class="bg-white">
@@ -26,7 +26,7 @@
                     @foreach ($careers as $career)
                         <a href="{{ route('karier.show', $career->slug) }}" class="group grid gap-2 py-7 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:gap-8 sm:px-2">
                             <span>
-                                <span class="text-xs font-bold uppercase tracking-[0.18em] text-neutral-400">{{ $career->department ?: 'Nusakode' }}{{ $career->location ? ' · '.$career->location : '' }}</span>
+                                <span class="text-xs font-bold uppercase tracking-[0.18em] text-neutral-400">{{ $career->department ?: 'KIT Konsultan IT' }}{{ $career->location ? ' · '.$career->location : '' }}</span>
                                 <span class="mt-1.5 block text-xl font-bold tracking-tight text-navy-950 transition group-hover:text-brand-700">{{ $career->title }}</span>
                                 <span class="mt-1 block text-[13px] text-neutral-500">{{ $career->employment_type ?: 'Full-time' }}{{ $career->is_remote ? ' · Remote' : '' }}{{ $career->deadline ? ' · Tutup '.$career->deadline->translatedFormat('d M Y') : '' }}</span>
                             </span>
