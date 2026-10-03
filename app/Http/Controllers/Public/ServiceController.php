@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Industry;
 use App\Models\Portfolio;
 use App\Models\Service;
+use App\Models\SolutionCategory;
 use Illuminate\View\View;
 
 class ServiceController extends Controller
@@ -23,6 +24,13 @@ class ServiceController extends Controller
             ->where('status', PublishStatus::Published->value)
             ->orderBy('sort_order')
             ->orderBy('name')
+            ->get();
+
+        $solutionCategories = SolutionCategory::query()
+            ->where('status', PublishStatus::Published->value)
+            ->whereHas('solutions', fn ($query) => $query->where('status', PublishStatus::Published->value))
+            ->with(['solutions' => fn ($query) => $query->where('status', PublishStatus::Published->value)->orderBy('sort_order')])
+            ->orderBy('sort_order')
             ->get();
 
         $educationCaseStudy = Portfolio::query()
@@ -81,6 +89,7 @@ class ServiceController extends Controller
             'services' => $services,
             'industries' => $industries,
             'segments' => $segments,
+            'solutionCategories' => $solutionCategories,
         ]);
     }
 

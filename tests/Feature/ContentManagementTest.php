@@ -18,6 +18,33 @@ class ContentManagementTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_admin_seo_settings_are_rendered_on_the_public_page(): void
+    {
+        $admin = User::factory()->create();
+
+        $this->actingAs($admin)
+            ->post(route('admin.seo.store'), [
+                'path' => '/solusi',
+                'label' => 'Halaman Solusi',
+                'title' => 'Solusi Digital Terpercaya',
+                'description' => 'Pilihan solusi digital untuk bisnis.',
+                'canonical_url' => 'https://example.com/solusi',
+                'og_image_path' => 'img/work-1.jpg',
+                'is_indexable' => '0',
+            ])
+            ->assertRedirect(route('admin.seo.index'));
+
+        $this->assertDatabaseHas('seo_meta', ['path' => '/solusi', 'title' => 'Solusi Digital Terpercaya']);
+
+        $this->get(route('solusi.index'))
+            ->assertOk()
+            ->assertSee('<title>Solusi Digital Terpercaya</title>', false)
+            ->assertSee('content="Pilihan solusi digital untuk bisnis."', false)
+            ->assertSee('href="https://example.com/solusi"', false)
+            ->assertSee('content="noindex, nofollow"', false)
+            ->assertSee('content="'.asset('img/work-1.jpg').'"', false);
+    }
+
     public function test_admin_can_create_team_member_and_it_appears_on_about_page(): void
     {
         $admin = User::factory()->create();
@@ -85,8 +112,8 @@ class ContentManagementTest extends TestCase
         $service = Service::query()->firstWhere('slug', 'web-development');
         $this->assertNotNull($service);
 
-        $this->get(route('layanan.index'))->assertOk()->assertSee('Web Development');
-        $this->get(route('layanan.show', $service->slug))->assertOk()->assertSee('Jasa pembuatan website');
+        $this->get(route('solusi.index'))->assertOk()->assertSee('Web Development');
+        $this->get(route('solusi.show', $service->slug))->assertOk()->assertSee('Jasa pembuatan website');
     }
 
     public function test_portfolio_with_details_renders_problem_solution_result(): void
@@ -182,7 +209,7 @@ class ContentManagementTest extends TestCase
         $this->get(route('sitemap'))
             ->assertOk()
             ->assertHeader('Content-Type', 'application/xml')
-            ->assertSee('/layanan/web-development', false)
+            ->assertSee('/solusi/web-development', false)
             ->assertSee('/tentang', false);
     }
 

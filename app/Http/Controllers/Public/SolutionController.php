@@ -64,6 +64,7 @@ class SolutionController extends Controller
         $more = Solution::query()
             ->where('status', PublishStatus::Published->value)
             ->where('solution_category_id', '!=', $category->id)
+            ->whereHas('category', fn ($query) => $query->where('status', PublishStatus::Published->value))
             ->with('category')
             ->orderBy('sort_order')
             ->limit(3)

@@ -13,6 +13,7 @@ use App\Models\Client;
 use App\Models\Hero;
 use App\Models\Industry;
 use App\Models\Portfolio;
+use App\Models\SeoMeta;
 use App\Models\Service;
 use App\Models\SiteSetting;
 use App\Models\Testimonial;
@@ -45,6 +46,20 @@ class AppServiceProvider extends ServiceProvider
         });
 
         View::composer('layouts.site', function ($view) {
+            try {
+                $path = '/'.ltrim(request()->path(), '/');
+                $pageSeo = SeoMeta::query()->where('path', $path)->first();
+                if ($pageSeo === null && $path === '/') {
+                    $pageSeo = SeoMeta::query()->where('path', '/beranda')->first();
+                }
+                if ($pageSeo === null && $path === '/solusi') {
+                    $pageSeo = SeoMeta::query()->where('path', '/layanan')->first();
+                }
+                $view->with('pageSeo', $pageSeo);
+            } catch (Throwable) {
+                $view->with('pageSeo', null);
+            }
+
             try {
                 $navServices = Service::query()
                     ->where('status', PublishStatus::Published->value)
@@ -131,6 +146,7 @@ class AppServiceProvider extends ServiceProvider
                     'dbQuotes' => [],
                     'dbInsights' => [],
                     'dbClients' => [],
+                    'cmsAvailable' => false,
                     'heroStats' => ['experience' => '10+', 'projects' => '120+', 'retention' => '98%'],
                     'heroImage' => asset('img/hero.jpg'),
                     'aboutImage' => asset('img/about.jpg'),
@@ -195,6 +211,7 @@ class AppServiceProvider extends ServiceProvider
      */
     private function landingContent(): array
     {
+        $cmsAvailable = true;
         $media = fn (?string $path, string $fallback) => match (true) {
             $path === null => asset($fallback),
             // Path bawaan seeder ('img/...') menunjuk aset statis di public/, bukan berkas unggahan.
@@ -219,6 +236,7 @@ class AppServiceProvider extends ServiceProvider
 
             $portfolios = Portfolio::query()
                 ->where('status', PublishStatus::Published->value)
+                ->with('client')
                 ->orderBy('sort_order')
                 ->latest()
                 ->limit(8)
@@ -244,9 +262,11 @@ class AppServiceProvider extends ServiceProvider
                 ->get();
         } catch (Throwable) {
             $services = $industries = $portfolios = $testimonials = $articles = $clients = collect();
+            $cmsAvailable = false;
         }
 
         return [
+            'cmsAvailable' => $cmsAvailable,
             'dbServices' => $services->map(fn (Service $service, int $index) => [
                 'no' => str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT),
                 'title' => $service->title,

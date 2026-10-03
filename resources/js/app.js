@@ -243,19 +243,21 @@ if (chatWidget) {
         bubble.appendChild(time);
 
         row.appendChild(bubble);
-        chatMessages.insertBefore(row, chatTyping);
+        const nextMessage = Array.from(chatMessages.querySelectorAll('[data-chat-message]'))
+            .find((existing) => Number(existing.getAttribute('data-chat-message')) > Number(message.id));
+        chatMessages.insertBefore(row, nextMessage ?? chatTyping);
     };
 
-    const renderMessages = (messages) => {
+    const renderMessages = (messages, advanceCursor = true) => {
         messages.forEach((message) => {
             renderMessage(message);
 
-            if (message.id > lastMessageId) {
+            if (advanceCursor && message.id > lastMessageId) {
                 lastMessageId = message.id;
             }
         });
 
-        scrollToBottom();
+        if (messages.length > 0) scrollToBottom();
     };
 
     const showEmptyState = () => {
@@ -378,7 +380,7 @@ if (chatWidget) {
 
             const data = await response.json();
 
-            renderMessages([data.message, data.auto_reply].filter(Boolean));
+            renderMessages([data.message, data.auto_reply].filter(Boolean), false);
 
             chatBody.value = '';
         } catch (error) {

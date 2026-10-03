@@ -116,14 +116,43 @@
                 <div class="max-w-2xl">
                     <p class="text-xs font-bold uppercase tracking-[0.2em] text-brand-700">Industri</p>
                     <h2 class="mt-3 text-2xl font-extrabold tracking-tight text-navy-950 sm:text-3xl">Mengenal kebutuhan tiap sektor</h2>
-                    <p class="mt-3 text-[15px] leading-relaxed text-neutral-500">Selain pendidikan, sistem dapat disesuaikan dengan proses dan kebutuhan sektor bisnis yang berbeda.</p>
+                    <p class="mt-3 text-[15px] leading-relaxed text-neutral-500">Sistem dapat disesuaikan dengan proses dan kebutuhan tiap sektor.</p>
                 </div>
                 <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                    @foreach ($industries->reject(fn ($industry) => $industry->slug === 'pendidikan') as $industry)
-                        <a href="#industri" class="rounded-xl border border-neutral-200 bg-white p-5 transition hover:border-brand-300">
+                    @foreach ($industries as $industry)
+                        <a href="{{ $industry->slug === 'pendidikan' ? '#perguruan-tinggi' : '#industri' }}" class="rounded-xl border border-neutral-200 bg-white p-5 transition hover:border-brand-300">
                             <h3 class="font-bold text-navy-950">{{ $industry->name }}</h3>
                             <p class="mt-2 text-sm leading-relaxed text-neutral-500">{{ \Illuminate\Support\Str::limit($industry->description, 110) }}</p>
                         </a>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
+
+    @if ($solutionCategories->isNotEmpty())
+        <section class="border-t border-neutral-100 bg-neutral-50/70">
+            <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20">
+                <div class="max-w-2xl">
+                    <p class="text-xs font-bold uppercase tracking-[0.2em] text-brand-700">Solusi digital</p>
+                    <h2 class="mt-3 text-2xl font-extrabold tracking-tight text-navy-950 sm:text-3xl">Jelajahi produk dan solusi terkelola</h2>
+                    <p class="mt-3 text-[15px] leading-relaxed text-neutral-500">Pilihan solusi berdasarkan kebutuhan institusi dan bisnis Anda.</p>
+                </div>
+                <div class="mt-8 divide-y divide-neutral-200 border-y border-neutral-200">
+                    @foreach ($solutionCategories as $category)
+                        <div class="grid gap-3 py-6 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-8">
+                            <div>
+                                <a href="{{ route('solusi.category', $category->slug) }}" class="text-lg font-bold text-navy-950 transition hover:text-brand-700">{{ $category->name }} <span aria-hidden="true">↗</span></a>
+                                @if ($category->tagline)
+                                    <p class="mt-1 text-sm text-neutral-500">{{ $category->tagline }}</p>
+                                @endif
+                            </div>
+                            <div class="flex flex-wrap gap-x-6 gap-y-2 md:items-center">
+                                @foreach ($category->solutions as $solution)
+                                    <a href="{{ route('solusi.solution', [$category->slug, $solution->slug]) }}" class="text-sm font-medium text-neutral-700 transition hover:text-brand-700">{{ $solution->title }} <span aria-hidden="true">→</span></a>
+                                @endforeach
+                            </div>
+                        </div>
                     @endforeach
                 </div>
             </div>

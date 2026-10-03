@@ -2,21 +2,19 @@
 
 @section('content')
 @php
-$clients = [
-    ['file' => 'googlecloud', 'name' => 'Google Cloud', 'hover' => 'hover:text-[#4285F4]'],
-    ['file' => 'github', 'name' => 'GitHub', 'hover' => 'hover:text-[#181717]'],
-    ['file' => 'cloudflare', 'name' => 'Cloudflare', 'hover' => 'hover:text-[#F38020]'],
-    ['file' => 'stripe', 'name' => 'Stripe', 'hover' => 'hover:text-[#635BFF]'],
-    ['file' => 'vercel', 'name' => 'Vercel', 'hover' => 'hover:text-black'],
-    ['file' => 'atlassian', 'name' => 'Atlassian', 'hover' => 'hover:text-[#0052CC]'],
-    ['file' => 'docker', 'name' => 'Docker', 'hover' => 'hover:text-[#2496ED]'],
-    ['file' => 'kubernetes', 'name' => 'Kubernetes', 'hover' => 'hover:text-[#326CE5]'],
-    ['file' => 'gitlab', 'name' => 'GitLab', 'hover' => 'hover:text-[#FC6D26]'],
-    ['file' => 'mongodb', 'name' => 'MongoDB', 'hover' => 'hover:text-[#47A248]'],
-    ['file' => 'postgresql', 'name' => 'PostgreSQL', 'hover' => 'hover:text-[#4169E1]'],
-    ['file' => 'laravel', 'name' => 'Laravel', 'hover' => 'hover:text-[#FF2D20]'],
-    ['file' => 'php', 'name' => 'PHP', 'hover' => 'hover:text-[#777BB4]'],
-    ['file' => 'python', 'name' => 'Python', 'hover' => 'hover:text-[#3776AB]'],
+$tools = [
+    ['name' => 'Vercel', 'logo' => 'vercel'],
+    ['name' => 'Laravel', 'logo' => 'laravel'],
+    ['name' => 'GitHub', 'logo' => 'github'],
+    ['name' => 'PHP', 'logo' => 'php'],
+    ['name' => 'Docker', 'logo' => 'docker'],
+    ['name' => 'Cloudflare', 'logo' => 'cloudflare'],
+    ['name' => 'PostgreSQL', 'logo' => 'postgresql'],
+    ['name' => 'GitLab', 'logo' => 'gitlab'],
+    ['name' => 'Google Cloud', 'logo' => 'googlecloud'],
+    ['name' => 'MongoDB', 'logo' => 'mongodb'],
+    ['name' => 'Python', 'logo' => 'python'],
+    ['name' => 'Atlassian', 'logo' => 'atlassian'],
 ];
 
 $services = [
@@ -45,16 +43,16 @@ $quotes = [
     ['text' => 'Dokumentasinya lengkap dan kode diserahterimakan penuh. Tim internal kami bisa melanjutkan pengembangan tanpa ketergantungan.', 'name' => 'Dr. Lestari Widodo', 'role' => 'Wakil Rektor, Universitas Cendana', 'initials' => 'LW'],
 ];
 
-$insights = $dbInsights ?: [
+$insights = ($cmsAvailable ?? false) ? $dbInsights : [
     ['cat' => 'Panduan', 'img' => 'img/work-3.jpg', 'title' => 'Menyusun Kerangka Acuan Kerja Proyek Software Agar Tidak Bengkak', 'date' => '11 September 2026'],
     ['cat' => 'Keamanan', 'img' => 'img/work-4.jpg', 'title' => 'Jadwal Pengujian Penetrasi yang Wajar untuk Aplikasi Perusahaan', 'date' => '9 September 2026'],
     ['cat' => 'Operasional', 'img' => 'img/work-2.jpg', 'title' => 'Checklist Serah Terima Aplikasi dari Vendor ke Tim Internal', 'date' => '5 September 2026'],
 ];
 
-// Data dari basis data bila admin sudah mengisinya; kalau masih kosong pakai contoh di atas.
-$services = $dbServices ?: $services;
-$works = $dbWorks ?: $works;
-$quotes = $dbQuotes ?: $quotes;
+// Contoh statis dipakai hanya jika basis data belum tersedia.
+$services = ($cmsAvailable ?? false) ? $dbServices : $services;
+$works = ($cmsAvailable ?? false) ? $dbWorks : $works;
+$quotes = ($cmsAvailable ?? false) ? $dbQuotes : $quotes;
 @endphp
 
     {{-- ============ HERO ============ --}}
@@ -98,18 +96,17 @@ $quotes = $dbQuotes ?: $quotes;
         </div>
     </section>
 
-    {{-- ============ KLIEN ============ --}}
-    <section class="border-y border-neutral-100 bg-neutral-50/60 py-10" aria-label="Klien yang bekerja sama">
+    {{-- ============ TEKNOLOGI ============ --}}
+    <section class="border-y border-neutral-100 bg-neutral-50/60 py-10" aria-label="Teknologi yang kami gunakan">
         <div class="mx-auto max-w-7xl px-4 sm:px-6">
-            <div class="overflow-hidden">
-                <div class="flex w-max animate-marquee items-center">
+            <div class="marquee-fade overflow-hidden">
+                <div class="tools-marquee flex w-max animate-marquee items-center">
                     @foreach ([false, true] as $duplicate)
-                        <div class="flex items-center gap-14 pr-14 text-neutral-400" @if ($duplicate) aria-hidden="true" @endif>
-                            @foreach ($clients as $c)
-                                @php($svg = file_get_contents(public_path("img/brands/{$c['file']}.svg")))
-                                <span class="inline-flex items-center gap-2.5 transition {{ $c['hover'] }}" title="{{ $c['name'] }}">
-                                    <span class="block h-7 w-7 shrink-0 [&>svg]:h-full [&>svg]:w-full">{!! $svg !!}</span>
-                                    <span class="whitespace-nowrap text-sm font-bold">{{ $c['name'] }}</span>
+                        <div class="flex shrink-0 items-center gap-14 pr-14 text-neutral-500" @if ($duplicate) aria-hidden="true" @endif>
+                            @foreach ($tools as $tool)
+                                <span class="inline-flex shrink-0 items-center gap-3" title="{{ $tool['name'] }}">
+                                    <img src="{{ asset('img/brands/'.$tool['logo'].'.svg') }}" alt="" class="h-8 w-8 shrink-0 object-contain opacity-60" loading="lazy" width="32" height="32">
+                                    <span class="whitespace-nowrap text-base font-semibold">{{ $tool['name'] }}</span>
                                 </span>
                             @endforeach
                         </div>
@@ -120,6 +117,7 @@ $quotes = $dbQuotes ?: $quotes;
     </section>
 
     {{-- ============ SOLUSI INTERAKTIF ============ --}}
+    @if ($services)
     <section id="solusi" class="scroll-mt-24 py-20 sm:py-28">
         <div class="mx-auto max-w-7xl px-4 sm:px-6">
             <div class="flex flex-wrap items-end justify-between gap-6">
@@ -181,8 +179,10 @@ $quotes = $dbQuotes ?: $quotes;
             </div>
         </div>
     </section>
+    @endif
 
     {{-- ============ PORTOFOLIO RINGKAS ============ --}}
+    @if ($works)
     <section id="portofolio" class="scroll-mt-24 bg-neutral-50/60 py-20 sm:py-28">
         <div class="mx-auto max-w-7xl px-4 sm:px-6">
             <div class="flex flex-wrap items-end justify-between gap-6">
@@ -218,6 +218,7 @@ $quotes = $dbQuotes ?: $quotes;
             </div>
         </div>
     </section>
+    @endif
 
     {{-- ============ TENTANG ============ --}}
     <section id="tentang" class="scroll-mt-24 py-20 sm:py-28">
@@ -246,6 +247,7 @@ $quotes = $dbQuotes ?: $quotes;
     </section>
 
     {{-- ============ TESTIMONI ============ --}}
+    @if ($quotes)
     <section class="border-y border-neutral-100 bg-neutral-50/60 py-20 sm:py-28" aria-label="Testimoni klien">
         <div class="mx-auto max-w-7xl px-4 sm:px-6">
             <div class="max-w-2xl">
@@ -280,8 +282,10 @@ $quotes = $dbQuotes ?: $quotes;
             </div>
         </div>
     </section>
+    @endif
 
     {{-- ============ INSIGHT ============ --}}
+    @if ($insights)
     <section id="insight" class="scroll-mt-24 py-20 sm:py-28">
         <div class="mx-auto max-w-5xl px-4 sm:px-6">
             <div class="flex flex-wrap items-end justify-between gap-4">
@@ -309,6 +313,7 @@ $quotes = $dbQuotes ?: $quotes;
             </div>
         </div>
     </section>
+    @endif
 
     {{-- ============ CTA KONTAK ============ --}}
     <section class="border-t border-neutral-200 bg-white py-16 text-navy-950">

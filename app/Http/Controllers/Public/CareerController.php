@@ -58,7 +58,7 @@ class CareerController extends Controller
 
         $cvPath = null;
         if ($request->hasFile('cv')) {
-            $cvPath = $request->file('cv')->store('career-cvs', 'public');
+            $cvPath = $request->file('cv')->store('career-cvs', 'local');
         }
 
         $career->applications()->create([

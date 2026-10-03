@@ -32,7 +32,7 @@ class SeoMeta extends Model
      */
     public static function defaultPaths(): array
     {
-        return ['/', '/tentang', '/layanan', '/portfolio', '/blog', '/karier', '/kontak'];
+        return ['/', '/tentang', '/solusi', '/portfolio', '/blog', '/karier', '/kontak'];
     }
 
     #[Scope]

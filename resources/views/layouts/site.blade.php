@@ -4,20 +4,27 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>@yield('title', 'KIT Konsultan IT — Perusahaan Jasa Teknologi Informasi Indonesia')</title>
-    <meta name="description" content="@yield('meta-description', 'KIT Konsultan IT: jasa pengembangan aplikasi web, sistem informasi, integrasi sistem, infrastruktur cloud, dan keamanan informasi untuk perusahaan di Indonesia.')">
-    <link rel="canonical" href="@yield('canonical', url()->current())">
+    <title>{{ $pageSeo?->title ?: trim($__env->yieldContent('title', 'KIT Konsultan IT — Perusahaan Jasa Teknologi Informasi Indonesia')) }}</title>
+    <meta name="description" content="{{ $pageSeo?->description ?: trim($__env->yieldContent('meta-description', 'KIT Konsultan IT: jasa pengembangan aplikasi web, sistem informasi, integrasi sistem, infrastruktur cloud, dan keamanan informasi untuk perusahaan di Indonesia.')) }}">
+    <link rel="canonical" href="{{ $pageSeo?->canonical_url ?: trim($__env->yieldContent('canonical', url()->current())) }}">
+    @if ($pageSeo && ! $pageSeo->is_indexable)
+        <meta name="robots" content="noindex, nofollow">
+    @endif
     <meta property="og:type" content="@yield('og-type', 'website')">
     <meta property="og:site_name" content="KIT Konsultan IT">
-    <meta property="og:title" content="@yield('og-title', trim($__env->yieldContent('title', 'KIT Konsultan IT — Perusahaan Jasa Teknologi Informasi Indonesia')))">
-    <meta property="og:description" content="@yield('og-description', trim($__env->yieldContent('meta-description', 'KIT Konsultan IT: jasa pengembangan aplikasi web, sistem informasi, integrasi sistem, infrastruktur cloud, dan keamanan informasi untuk perusahaan di Indonesia.')))">
+    <meta property="og:title" content="{{ $pageSeo?->title ?: trim($__env->yieldContent('og-title', $__env->yieldContent('title', 'KIT Konsultan IT — Perusahaan Jasa Teknologi Informasi Indonesia'))) }}">
+    <meta property="og:description" content="{{ $pageSeo?->description ?: trim($__env->yieldContent('og-description', $__env->yieldContent('meta-description', 'KIT Konsultan IT: jasa pengembangan aplikasi web, sistem informasi, integrasi sistem, infrastruktur cloud, dan keamanan informasi untuk perusahaan di Indonesia.'))) }}">
     <meta property="og:url" content="{{ url()->current() }}">
+    @if ($pageSeo?->og_image_path)
+        <meta property="og:image" content="{{ str_starts_with($pageSeo->og_image_path, 'img/') ? asset($pageSeo->og_image_path) : \Illuminate\Support\Facades\Storage::disk('public')->url($pageSeo->og_image_path) }}">
+    @else
     @hasSection('og-image')
         <meta property="og:image" content="@yield('og-image')">
     @endif
+    @endif
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="@yield('og-title', trim($__env->yieldContent('title', 'KIT Konsultan IT — Perusahaan Jasa Teknologi Informasi Indonesia')))">
-    <meta name="twitter:description" content="@yield('og-description', trim($__env->yieldContent('meta-description', 'KIT Konsultan IT: jasa pengembangan aplikasi web, sistem informasi, integrasi sistem, infrastruktur cloud, dan keamanan informasi untuk perusahaan di Indonesia.')))">
+    <meta name="twitter:title" content="{{ $pageSeo?->title ?: trim($__env->yieldContent('og-title', $__env->yieldContent('title', 'KIT Konsultan IT — Perusahaan Jasa Teknologi Informasi Indonesia'))) }}">
+    <meta name="twitter:description" content="{{ $pageSeo?->description ?: trim($__env->yieldContent('og-description', $__env->yieldContent('meta-description', 'KIT Konsultan IT: jasa pengembangan aplikasi web, sistem informasi, integrasi sistem, infrastruktur cloud, dan keamanan informasi untuk perusahaan di Indonesia.'))) }}">
     <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 

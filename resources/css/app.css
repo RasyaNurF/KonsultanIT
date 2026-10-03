@@ -95,7 +95,7 @@ body {
     transform: none;
 }
 
-/* Marquee logo klien */
+/* Marquee logo teknologi */
 @keyframes marquee {
     to {
         transform: translateX(-50%);
@@ -108,6 +108,14 @@ body {
 
 .animate-marquee:hover {
     animation-play-state: paused;
+}
+
+.tools-marquee {
+    animation-duration: 55s;
+}
+
+.tools-marquee:hover {
+    animation-play-state: running;
 }
 
 /* Marquee portofolio: baris atas ke kiri, baris bawah ke kanan.

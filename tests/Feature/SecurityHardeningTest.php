@@ -144,6 +144,33 @@ class SecurityHardeningTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_deactivated_user_is_signed_out_before_sending_a_message(): void
+    {
+        $user = User::factory()->user()->create();
+        $this->actingAs($user)->get(route('dashboard'))->assertOk();
+        $user->update(['is_active' => false]);
+
+        $this->postJson(route('pesan.store'), ['body' => 'Pesan akun nonaktif'])
+            ->assertForbidden();
+
+        $this->assertGuest();
+        $this->assertDatabaseMissing('chat_messages', ['body' => 'Pesan akun nonaktif']);
+    }
+
+    public function test_session_with_an_old_password_is_rejected(): void
+    {
+        $user = User::factory()->user()->create();
+        $oldPasswordHash = $user->password;
+        $user->update(['password' => 'kata-sandi-baru-123']);
+
+        $this->actingAs($user)
+            ->withSession(['password_hash_web' => $oldPasswordHash])
+            ->getJson(route('pesan.index'))
+            ->assertUnauthorized();
+
+        $this->assertGuest();
+    }
+
     public function test_javascript_url_is_rejected_for_announcements(): void
     {
         $this->actingAs(User::factory()->create())

@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class CareerApplicationController extends Controller
 {
@@ -47,6 +48,13 @@ class CareerApplicationController extends Controller
         ]);
     }
 
+    public function download(CareerApplication $careerApplication): StreamedResponse
+    {
+        abort_unless(filled($careerApplication->cv_path) && Storage::disk('local')->exists($careerApplication->cv_path), 404);
+
+        return Storage::disk('local')->download($careerApplication->cv_path, null, ['Cache-Control' => 'private, no-store']);
+    }
+
     public function update(CareerApplicationRequest $request, CareerApplication $careerApplication): RedirectResponse
     {
         $careerApplication->update($request->validated());
@@ -56,8 +64,8 @@ class CareerApplicationController extends Controller
 
     public function destroy(CareerApplication $careerApplication): RedirectResponse
     {
-        if (filled($careerApplication->cv_path) && Storage::disk('public')->exists($careerApplication->cv_path)) {
-            Storage::disk('public')->delete($careerApplication->cv_path);
+        if (filled($careerApplication->cv_path) && Storage::disk('local')->exists($careerApplication->cv_path)) {
+            Storage::disk('local')->delete($careerApplication->cv_path);
         }
 
         $careerApplication->delete();

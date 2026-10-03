@@ -85,8 +85,8 @@ class CareerController extends Controller
     public function destroy(Career $career): RedirectResponse
     {
         foreach ($career->applications as $application) {
-            if (filled($application->cv_path) && Storage::disk('public')->exists($application->cv_path)) {
-                Storage::disk('public')->delete($application->cv_path);
+            if (filled($application->cv_path) && Storage::disk('local')->exists($application->cv_path)) {
+                Storage::disk('local')->delete($application->cv_path);
             }
         }
 

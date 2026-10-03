@@ -45,7 +45,7 @@ class SolutionHierarchyTest extends TestCase
             'title' => 'Haermes HRIS',
             'status' => PublishStatus::Published,
         ]);
-        $otherSolution = Solution::create([
+        Solution::create([
             'solution_category_id' => $other->id,
             'title' => 'Managed Detection',
             'status' => PublishStatus::Published,
@@ -53,8 +53,7 @@ class SolutionHierarchyTest extends TestCase
 
         $response = $this->get(route('solusi.category', $category->slug))
             ->assertOk()
-            ->assertSee('Haermes HRIS')
-            ->assertSee(route('solusi.show', [$other->slug, $otherSolution->slug]));
+            ->assertSee('Haermes HRIS');
 
         $previousLibxmlErrorSetting = libxml_use_internal_errors(true);
         $document = new \DOMDocument;
@@ -84,7 +83,7 @@ class SolutionHierarchyTest extends TestCase
             'status' => PublishStatus::Published,
         ]);
 
-        $this->get(route('solusi.show', [$category->slug, $solution->slug]))
+        $this->get(route('solusi.solution', [$category->slug, $solution->slug]))
             ->assertOk()
             ->assertSee('Freshdesk')
             ->assertSee('Ticketing')
@@ -100,7 +99,7 @@ class SolutionHierarchyTest extends TestCase
             'status' => PublishStatus::Draft,
         ]);
 
-        $this->get(route('solusi.show', [$category->slug, $draft->slug]))->assertNotFound();
+        $this->get(route('solusi.solution', [$category->slug, $draft->slug]))->assertNotFound();
 
         $hidden = $this->makeCategory(['name' => 'Hidden', 'status' => PublishStatus::Draft]);
         $this->get(route('solusi.category', $hidden->slug))->assertNotFound();
@@ -124,7 +123,7 @@ class SolutionHierarchyTest extends TestCase
 
         $response = $this->get(route('solusi.index'))->assertOk();
 
-        $response->assertSee('Solusi unggulan')->assertSee('Solusi Unggulan')->assertSee('Solusi Biasa');
+        $response->assertSee('Solusi Unggulan')->assertSee('Solusi Biasa');
     }
 
     public function test_detail_links_to_solutions_from_other_categories(): void
@@ -143,7 +142,7 @@ class SolutionHierarchyTest extends TestCase
             'status' => PublishStatus::Published,
         ]);
 
-        $this->get(route('solusi.show', [$category->slug, $solution->slug]))
+        $this->get(route('solusi.solution', [$category->slug, $solution->slug]))
             ->assertOk()
             ->assertSee('Jelajahi solusi lainnya')
             ->assertSee('Managed Detection');

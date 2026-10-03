@@ -40,7 +40,7 @@
                 <div>
                     <dt class="text-[11px] font-bold uppercase tracking-[0.14em] text-neutral-400">CV</dt>
                     <dd class="mt-1">
-                        <a href="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($application->cv_path) }}" target="_blank" rel="noopener" class="font-medium text-brand-600 hover:text-brand-700">Unduh CV</a>
+                        <a href="{{ route('admin.career-applications.download', $application) }}" class="font-medium text-brand-600 hover:text-brand-700">Unduh CV</a>
                     </dd>
                 </div>
             @endif

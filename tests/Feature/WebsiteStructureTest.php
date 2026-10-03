@@ -21,7 +21,7 @@ class WebsiteStructureTest extends TestCase
 
         $this->get('/')
             ->assertOk()
-            ->assertSee(route('layanan.index'), false)
+            ->assertSee(route('solusi.index'), false)
             ->assertSee(route('portfolio.index'), false)
             ->assertSee(route('tentang'), false)
             ->assertSee(route('blog.index'), false)
@@ -30,6 +30,8 @@ class WebsiteStructureTest extends TestCase
 
     public function test_homepage_has_promo_banner_solution_menu_and_interactive_tabs(): void
     {
+        Service::create(['title' => 'Aplikasi Bisnis', 'status' => PublishStatus::Published]);
+
         Announcement::create([
             'placement' => AnnouncementPlacement::Bar,
             'message' => 'Butuh software untuk bisnis Anda?',
@@ -45,7 +47,6 @@ class WebsiteStructureTest extends TestCase
             ->assertSee('Pilih solusi sesuai kebutuhan Anda')
             ->assertSee('Pelajari Selengkapnya')
             ->assertSee('data-solusi-tab', false)
-            ->assertSee('GitHub')
             ->assertSee('Perusahaan')
             ->assertSee('Resources')
             ->assertSee('Karier')
@@ -56,14 +57,30 @@ class WebsiteStructureTest extends TestCase
 
     }
 
-    public function test_homepage_brand_strip_renders_icon_and_name(): void
+    public function test_homepage_brand_strip_renders_tool_logos_instead_of_client_names(): void
     {
         Client::create(['name' => 'Bank Arta', 'status' => 'active']);
 
         $this->get('/')
             ->assertOk()
-            ->assertSee('Docker')
-            ->assertSee('Laravel');
+            ->assertSee('Teknologi yang kami gunakan')
+            ->assertSee('Vercel')
+            ->assertSee('Laravel')
+            ->assertSee(asset('img/brands/vercel.svg'), false)
+            ->assertSee(asset('img/brands/laravel.svg'), false)
+            ->assertSee('tools-marquee')
+            ->assertDontSee('Bank Arta');
+    }
+
+    public function test_homepage_does_not_show_sample_content_when_admin_has_no_published_content(): void
+    {
+        Service::create(['title' => 'Layanan Draf', 'status' => PublishStatus::Draft]);
+
+        $this->get('/')
+            ->assertOk()
+            ->assertDontSee('Layanan Draf')
+            ->assertDontSee('Pilih solusi sesuai kebutuhan Anda')
+            ->assertDontSee('Dashboard Keuangan Internal');
     }
 
     public function test_layanan_page_shows_industry_solutions(): void
@@ -74,10 +91,10 @@ class WebsiteStructureTest extends TestCase
             'status' => PublishStatus::Published,
         ]);
 
-        $this->get(route('layanan.index'))
+        $this->get(route('solusi.index'))
             ->assertOk()
-            ->assertSee('Solusi per industri')
-            ->assertSee('Pendidikan');
+            ->assertSee('Pendidikan')
+            ->assertSee('Sistem akademik terpadu.');
     }
 
     public function test_tentang_page_shows_work_process(): void

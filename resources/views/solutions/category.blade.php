@@ -46,7 +46,7 @@
             <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20">
                 <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach($solutions as $solution)
-                        <a href="{{route('solusi.show',[$category->slug,$solution->slug])}}" class="group flex flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white transition hover:-translate-y-1 hover:border-brand-200 hover:shadow-xl hover:shadow-navy-950/5">
+                        <a href="{{route('solusi.solution',[$category->slug,$solution->slug])}}" class="group flex flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white transition hover:-translate-y-1 hover:border-brand-200 hover:shadow-xl hover:shadow-navy-950/5">
                             <div class="relative h-40 overflow-hidden bg-neutral-100">
                                 @if($solution->cover_image_path)
                                     <img src="{{str_starts_with($solution->cover_image_path,'img/')?asset($solution->cover_image_path):\Illuminate\Support\Facades\Storage::disk('public')->url($solution->cover_image_path)}}" alt="{{$solution->title}}" class="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]" loading="lazy">

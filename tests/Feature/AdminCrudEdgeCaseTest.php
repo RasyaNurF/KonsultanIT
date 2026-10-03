@@ -113,12 +113,12 @@ class AdminCrudEdgeCaseTest extends TestCase
 
     public function test_deleting_a_career_removes_application_cv_files(): void
     {
-        Storage::fake('public');
+        Storage::fake('local');
         $this->actingAs(User::factory()->superAdmin()->create());
 
         $career = Career::create(['title' => 'Posisi CV', 'status' => PublishStatus::Published->value]);
 
-        Storage::disk('public')->put('career-cvs/cv-uji.pdf', 'PDF');
+        Storage::disk('local')->put('career-cvs/cv-uji.pdf', 'PDF');
         $career->applications()->create([
             'name' => 'Pelamar',
             'email' => 'pelamar@example.com',
@@ -128,7 +128,7 @@ class AdminCrudEdgeCaseTest extends TestCase
 
         $this->delete(route('admin.careers.destroy', $career))->assertRedirect();
 
-        Storage::disk('public')->assertMissing('career-cvs/cv-uji.pdf');
+        Storage::disk('local')->assertMissing('career-cvs/cv-uji.pdf');
         $this->assertDatabaseMissing('careers', ['id' => $career->id]);
     }
 

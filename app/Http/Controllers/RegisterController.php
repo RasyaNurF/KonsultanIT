@@ -29,6 +29,7 @@ class RegisterController extends Controller
             'email' => $validated['email'],
             'password' => $validated['password'],
             'role' => AdminRole::User,
+            'is_active' => true,
         ]);
 
         Auth::login($user);

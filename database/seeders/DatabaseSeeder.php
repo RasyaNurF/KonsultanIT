@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AnnouncementSeeder::class);
 
         User::query()->updateOrCreate(
-            ['email' => 'admin@nusakode.id'],
+            ['email' => 'admin@konsultanit.id'],
             [
                 'name' => 'Admin KIT Konsultan IT',
                 'password' => Hash::make('password'),

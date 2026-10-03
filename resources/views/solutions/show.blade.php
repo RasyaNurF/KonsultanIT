@@ -114,7 +114,7 @@
                 <h2 class="text-2xl font-extrabold tracking-tight text-navy-950 sm:text-3xl">Solusi lain di {{$category->name}}</h2>
                 <div class="mt-10 grid gap-px overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-200 sm:grid-cols-3">
                     @foreach($related as $item)
-                        <a href="{{route('solusi.show',[$category->slug,$item->slug])}}" class="group bg-white p-8 transition hover:bg-neutral-50">
+                        <a href="{{route('solusi.solution',[$category->slug,$item->slug])}}" class="group bg-white p-8 transition hover:bg-neutral-50">
                             @if($item->partner_name)
                                 <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-neutral-400">{{$item->partner_name}}</p>
                             @endif
@@ -135,7 +135,7 @@
                 <h2 class="text-2xl font-extrabold tracking-tight text-navy-950 sm:text-3xl">Jelajahi solusi lainnya</h2>
                 <div class="mt-10 grid gap-px overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-200 sm:grid-cols-3">
                     @foreach($more as $item)
-                        <a href="{{route('solusi.show',[$item->category->slug,$item->slug])}}" class="group bg-white p-8 transition hover:bg-neutral-50">
+                        <a href="{{route('solusi.solution',[$item->category->slug,$item->slug])}}" class="group bg-white p-8 transition hover:bg-neutral-50">
                             <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-700">{{$item->category->name}}</p>
                             <h3 class="mt-2 text-lg font-bold tracking-tight text-navy-950 transition group-hover:text-brand-700">{{$item->title}}</h3>
                             @if($item->excerpt)

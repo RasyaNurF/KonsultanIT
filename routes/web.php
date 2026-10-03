@@ -38,6 +38,7 @@ use App\Http\Controllers\Public\CareerController as PublicCareerController;
 use App\Http\Controllers\Public\PortfolioController as PublicPortfolioController;
 use App\Http\Controllers\Public\ResourceController as PublicResourceController;
 use App\Http\Controllers\Public\ServiceController as PublicServiceController;
+use App\Http\Controllers\Public\SolutionController as PublicSolutionController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SitemapController;
 use App\Models\Resource;
@@ -51,8 +52,9 @@ Route::get('/tentang', AboutController::class)->middleware('maintenance')->name(
 Route::redirect('/layanan', '/solusi', 301);
 Route::get('/layanan/{slug}', fn (string $slug) => redirect('/solusi/'.$slug, 301))->middleware('maintenance');
 Route::get('/solusi', [PublicServiceController::class, 'index'])->middleware('maintenance')->name('solusi.index');
+Route::get('/solusi/kategori/{category:slug}', [PublicSolutionController::class, 'category'])->middleware('maintenance')->name('solusi.category');
+Route::get('/solusi/kategori/{category:slug}/{solution:slug}', [PublicSolutionController::class, 'show'])->middleware('maintenance')->name('solusi.solution');
 Route::get('/solusi/{service:slug}', [PublicServiceController::class, 'show'])->middleware('maintenance')->name('solusi.show');
-Route::get('/solusi/kategori/{path}', fn () => redirect('/solusi', 301))->middleware('maintenance')->where('path', '.*');
 Route::get('/resources/{type}', [PublicResourceController::class, 'type'])->middleware('maintenance')->name('resources.type');
 Route::get('/resources/{type}/{resource:slug}', [PublicResourceController::class, 'show'])->middleware('maintenance')->name('resources.show');
 
@@ -353,6 +355,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin.ability:dashb
         Route::get('karier/{career}/ubah', [CareerController::class, 'edit'])->name('careers.edit');
 
         Route::get('lamaran', [CareerApplicationController::class, 'index'])->name('career-applications.index');
+        Route::get('lamaran/{careerApplication}/cv', [CareerApplicationController::class, 'download'])->name('career-applications.download');
         Route::get('lamaran/{careerApplication}', [CareerApplicationController::class, 'show'])->name('career-applications.show');
 
         Route::middleware('admin.ability:career.manage')->group(function () {

@@ -30,6 +30,7 @@ class PasswordResetTest extends TestCase
     public function test_password_can_be_reset_with_a_valid_token(): void
     {
         $user = User::factory()->create();
+        $rememberToken = $user->remember_token;
         $token = Password::createToken($user);
 
         $response = $this->post(route('password.update'), [
@@ -41,6 +42,7 @@ class PasswordResetTest extends TestCase
 
         $response->assertRedirect(route('login'));
         $this->assertTrue(Hash::check('kata-sandi-baru-123', $user->fresh()->password));
+        $this->assertNotSame($rememberToken, $user->fresh()->remember_token);
     }
 
     public function test_password_cannot_be_reset_with_an_invalid_token(): void
